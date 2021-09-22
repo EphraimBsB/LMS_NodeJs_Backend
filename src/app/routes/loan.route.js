@@ -1,0 +1,30 @@
+import express from "express";
+import { loanController } from "../controllers";
+import { checkAuth, checkRole } from "../middlewares/check.auth";
+const router = express.Router();
+router.post(
+  "/",
+  checkAuth,
+  checkRole(["librarian", "admin", "student"]),
+  loanController.newLoan
+);
+router.patch(
+  "/loans",
+  checkAuth,
+  checkRole(["librarian", "admin", "student"]),
+  loanController.findall
+);
+router.get(
+  "/loans/:id",
+  checkAuth,
+  checkRole(["librarian", "admin"]),
+  loanController.findOne
+);
+router.get(
+  "/userloans/:id",
+  checkAuth,
+  checkRole(["librarian", "admin", "student"]),
+  loanController.findUserLoans
+);
+
+export default router;
