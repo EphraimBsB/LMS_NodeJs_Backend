@@ -8,7 +8,7 @@ class LoanController {
       .checkLoan(bookId)
       .then((result) => {
         if (result) {
-          res.status(201).json({
+          res.status(409).json({
             message: "Loan already exist",
           });
         } else {

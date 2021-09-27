@@ -1,7 +1,13 @@
 import model from "../../models";
 import { Op } from "sequelize";
+import { async } from "regenerator-runtime";
 
 class LoanService {
+  constructor() {
+    let timerId;
+    this.timerId = timerId;
+  }
+
   new = async (userId, bookId) => {
     // const { userId, bookId } = req.body;
     let issueDate = new Date();
@@ -69,14 +75,15 @@ class LoanService {
         },
       ],
     });
-    loans.forEach((element) => {
-      const id = element.id;
-      setTimeout(async () => {
-        const overDue = new Date();
-        if (overDue.getTime() > element.dueDate.getTime()) {
-          await model.Loans.update({ status: "overdue" });
-        }
-      }, 1000);
+    loans.forEach(async (element) => {
+      const dueDate = element.dueDate;
+      const overdueDate = new Date();
+      if (overdueDate.getTime() >= dueDate.getTime()) {
+        element.update({
+          status: "overdue",
+          where: { status: "inProgress" },
+        });
+      }
     });
 
     if (!loans) return null;
@@ -88,14 +95,41 @@ class LoanService {
     const { id } = req.params;
     let { action } = req.body;
     const loan = await model.Loans.findOne({
+      attributes: [
+        "id",
+        "userId",
+        "bookId",
+        "issueDate",
+        "dueDate",
+        "returnDate",
+        "status",
+      ],
       where: { id },
 
       include: [
         {
           model: model.Books,
+          attributes: [
+            "id",
+            "title",
+            "author",
+            "ddc",
+            "acc_number",
+            "category",
+            "status",
+            "image",
+          ],
         },
         {
           model: model.User,
+          attributes: [
+            "id",
+            "name",
+            "last_name",
+            "roll_number",
+            "email",
+            "phone_number",
+          ],
         },
       ],
     });

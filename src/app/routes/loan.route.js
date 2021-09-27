@@ -14,7 +14,7 @@ router.patch(
   checkRole(["librarian", "admin", "student"]),
   loanController.findall
 );
-router.get(
+router.patch(
   "/loans/:id",
   checkAuth,
   checkRole(["librarian", "admin"]),
