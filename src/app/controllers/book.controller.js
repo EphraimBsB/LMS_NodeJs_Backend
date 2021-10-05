@@ -1,6 +1,7 @@
 class BookController {
-  constructor(service) {
+  constructor(service, workbook) {
     this.service = service;
+    this.workbook = workbook;
   }
   newBook = (req, res) => {
     const { book } = req;
@@ -145,6 +146,52 @@ class BookController {
         res.status(500).json({
           message: "Something went wrong",
           error: err.name,
+        });
+      });
+  };
+
+  exportExcel = async (req, res) => {
+    this.service
+      .findAllBooks()
+      .then((objs) => {
+        let books = [];
+
+        objs.forEach((obj) => {
+          books.push({
+            id: obj.id,
+            title: obj.title,
+            author: obj.author,
+            ddc: obj.ddc,
+            acc_number: obj.acc_number,
+            category: obj.category,
+            status: obj.status,
+          });
+        });
+
+        this.workbook.removeWorksheet();
+        let worksheet = this.workbook.addWorksheet("Books");
+
+        worksheet.columns = [
+          { header: "Title", key: "title", width: 35 },
+          { header: "Author", key: "author", width: 35 },
+          { header: "DDC", key: "ddc", width: 15 },
+          { header: "ACC Number", key: "acc_number", width: 15 },
+          { header: "ategory", key: "category", width: 20 },
+          { header: "Status", key: "status", width: 20 },
+        ];
+
+        // Add Array Rows
+        worksheet.addRows(books);
+
+        const data = this.workbook.xlsx.writeFile("./excel.data/books.xlsx");
+        res.status(200).json({
+          message: "Succefull",
+        });
+      })
+      .catch((err) => {
+        res.status(500).json({
+          message: "Something went wrong",
+          error: err,
         });
       });
   };

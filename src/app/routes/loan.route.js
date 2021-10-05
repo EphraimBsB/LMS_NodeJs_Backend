@@ -27,4 +27,6 @@ router.get(
   loanController.findUserLoans
 );
 
+router.get("/export", loanController.exportExcel);
+
 export default router;
