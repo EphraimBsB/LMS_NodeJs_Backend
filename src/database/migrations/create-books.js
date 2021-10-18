@@ -21,7 +21,13 @@ module.exports = {
       author: {
         type: Sequelize.TEXT,
       },
+      description: {
+        type: Sequelize.TEXT,
+      },
       acc_number: {
+        type: Sequelize.INTEGER,
+      },
+      copies: {
         type: Sequelize.INTEGER,
       },
       category: {
@@ -29,12 +35,12 @@ module.exports = {
       },
       status: {
         type: Sequelize.ENUM(
-          "available",
-          "unavailable",
-          "reserved",
-          "borrowed"
+          "Available",
+          "Unavailable",
+          "Reserved",
+          "Borrowed"
         ),
-        defaultValue: "available",
+        defaultValue: "Available",
       },
       image: {
         type: Sequelize.STRING,

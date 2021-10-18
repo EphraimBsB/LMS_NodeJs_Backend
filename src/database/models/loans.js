@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
       issueDate: DataTypes.DATE,
       dueDate: DataTypes.DATE,
       returnDate: DataTypes.BOOLEAN,
-      status: DataTypes.ENUM("inProgress", "overdue", "returned"),
+      status: DataTypes.ENUM("Inprogress", "Overdue", "Returned"),
     },
     {
       sequelize,

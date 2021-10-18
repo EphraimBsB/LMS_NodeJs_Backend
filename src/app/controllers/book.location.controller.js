@@ -10,7 +10,7 @@ class BookLocationController {
       .find(bookId)
       .then((result) => {
         if (result) {
-          res.status(201).json({
+          res.status(409).json({
             message: "Book Location already exist",
           });
         } else {

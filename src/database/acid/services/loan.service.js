@@ -13,7 +13,7 @@ class LoanService {
     let issueDate = new Date();
     let dueDate = new Date(issueDate.getTime() + 7 * 24 * 60 * 60 * 1000);
     const returnDate = null;
-    let status = "inProgress";
+    let status = "Inprogress";
     const user = await model.User.findOne({ where: { id: userId } });
     const book = await model.Books.findOne({ where: { id: bookId } });
     const newloan = await model.Loans.create({
@@ -28,7 +28,7 @@ class LoanService {
       where: { id: bookId },
     });
 
-    findBook.update({ status: "borrowed" });
+    findBook.update({ status: "Borrowed" });
 
     return newloan;
   };
@@ -55,9 +55,11 @@ class LoanService {
             "id",
             "title",
             "author",
+            "description",
             "ddc",
             "acc_number",
             "category",
+            "copies",
             "status",
             "image",
           ],
@@ -80,8 +82,8 @@ class LoanService {
       const overdueDate = new Date();
       if (overdueDate.getTime() >= dueDate.getTime()) {
         element.update({
-          status: "overdue",
-          where: { status: "inProgress" },
+          status: "Overdue",
+          where: { status: "Inprogress" },
         });
       }
     });
@@ -103,6 +105,7 @@ class LoanService {
         "dueDate",
         "returnDate",
         "status",
+        "updatedAt",
       ],
       where: { id },
 
@@ -133,13 +136,16 @@ class LoanService {
         },
       ],
     });
-    if (action === true) {
+    if (action === "return") {
       const findBook = await model.Books.findOne({
         where: { id: loan.bookId },
       });
 
-      findBook.update({ status: "available" });
-      loan.update({ returnDate: new Date(), status: "returned" });
+      findBook.update({ status: "Available" });
+      loan.update({
+        returnDate: new Date(),
+        status: "Returned",
+      });
     }
     return loan;
   };
@@ -149,7 +155,7 @@ class LoanService {
       where: {
         bookId: bookId,
         [Op.and]: {
-          [Op.or]: [{ status: "inProgress" }, { status: "overdue" }],
+          [Op.or]: [{ status: "Inprogress" }, { status: "Overdue" }],
         },
       },
     });

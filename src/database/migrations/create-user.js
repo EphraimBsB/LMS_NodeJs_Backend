@@ -7,10 +7,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      uuid: {
-        type: Sequelize.UUID,
-        defaultValue: Sequelize.UUIDV4,
-      },
       name: {
         type: Sequelize.STRING,
       },
@@ -18,6 +14,9 @@ module.exports = {
         type: Sequelize.STRING,
       },
       roll_number: {
+        type: Sequelize.STRING,
+      },
+      course: {
         type: Sequelize.STRING,
       },
       email: {

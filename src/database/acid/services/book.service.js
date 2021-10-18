@@ -7,6 +7,14 @@ class BookService {
     return newbook;
   };
 
+  createAcc = async (req) => {
+    const { book } = req;
+    const { copies } = book;
+    for (let acc_number = 0; acc_number < copies; acc_number++) {
+      await model.AccNumbers.create({ acc_number });
+    }
+  };
+
   findBookbyDdc = async (ddc) => {
     const findBook = await model.Books.findOne({ where: { ddc } });
     return findBook;
@@ -43,11 +51,14 @@ class BookService {
         "id",
         "title",
         "author",
+        "description",
         "ddc",
         "acc_number",
         "category",
+        "copies",
         "status",
         "image",
+        "createdAt",
       ],
       include: [
         {
@@ -80,11 +91,14 @@ class BookService {
         "id",
         "title",
         "author",
+        "description",
         "ddc",
         "acc_number",
         "category",
+        "copies",
         "status",
         "image",
+        "createdAt",
       ],
       include: [
         {

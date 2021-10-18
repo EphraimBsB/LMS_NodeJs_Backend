@@ -1,33 +1,19 @@
 "use strict";
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("Loans", {
+    await queryInterface.createTable("AccNumbers", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      userId: {
-        type: Sequelize.INTEGER,
-        foreignKey: true,
-      },
       bookId: {
         type: Sequelize.INTEGER,
         foreignKey: true,
       },
-      issueDate: {
-        type: Sequelize.DATE,
-      },
-      dueDate: {
-        type: Sequelize.DATE,
-      },
-      returnDate: {
-        type: Sequelize.DATE,
-      },
-      status: {
-        type: Sequelize.ENUM("Inprogress", "Overdue", "Returned"),
-        defaultValue: "Inprogress",
+      acc_number: {
+        type: Sequelize.INTEGER,
       },
       createdAt: {
         allowNull: false,
@@ -40,6 +26,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("Loans");
+    await queryInterface.dropTable("AccNumbers");
   },
 };

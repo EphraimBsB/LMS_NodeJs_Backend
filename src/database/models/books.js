@@ -33,7 +33,9 @@ module.exports = (sequelize, DataTypes) => {
       ddc: DataTypes.STRING,
       title: DataTypes.TEXT,
       author: DataTypes.TEXT,
+      description: DataTypes.TEXT,
       acc_number: DataTypes.STRING,
+      copies: DataTypes.INTEGER,
       image: DataTypes.STRING,
       category: DataTypes.ENUM(
         "Computer",
@@ -44,10 +46,10 @@ module.exports = (sequelize, DataTypes) => {
         "Indian"
       ),
       status: DataTypes.ENUM(
-        "available",
-        "unavailable",
-        "reserved",
-        "borrowed"
+        "Available",
+        "Unavailable",
+        "Reserved",
+        "Borrowed"
       ),
     },
     {

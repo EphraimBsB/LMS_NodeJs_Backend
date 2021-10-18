@@ -15,10 +15,5 @@ class UserService {
     const userFind = await model.User.findAll();
     return userFind;
   };
-
-  // confirm = async (email) => {
-  //   const userFind = await model.User.findOne({ where: { email } });
-  //   return userFind;
-  // };
 }
 export default UserService;

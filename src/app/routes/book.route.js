@@ -12,6 +12,13 @@ router.post(
   checkRole(["librarian", "admin"]),
   bookController.newBook
 );
+router.post(
+  "/acc_numbers",
+  // bookValidation,
+  // checkAuth,
+  // checkRole(["librarian", "admin"]),
+  bookController.accNUmbers
+);
 router.get("/books/:id", bookController.findBook);
 router.get(
   "/books",

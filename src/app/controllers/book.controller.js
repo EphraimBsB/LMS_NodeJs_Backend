@@ -36,6 +36,26 @@ class BookController {
           err: err.message,
         });
       });
+    this.service.createAcc(req);
+  };
+
+  accNUmbers = (req, res) => {
+    const { book } = req;
+    const { copies } = book;
+    this.service
+      .createAcc(copies)
+      .then((resust) => {
+        res.status(200).json({
+          message: "sucess",
+          book: resust,
+        });
+      })
+      .catch((err) => {
+        res.status(500).json({
+          message: "Something went wrong",
+          err: err.message,
+        });
+      });
   };
 
   findBook = (req, res) => {
@@ -159,10 +179,12 @@ class BookController {
         objs.forEach((obj) => {
           books.push({
             id: obj.id,
-            title: obj.title,
-            author: obj.author,
-            ddc: obj.ddc,
-            acc_number: obj.acc_number,
+            title: obj.Book.title,
+            author: obj.Book.author,
+            description: obj.Book.description,
+            ddc: obj.Book.ddc,
+            copies: obj.Book.copies,
+            acc_number: obj.Book.acc_number,
             category: obj.category,
             status: obj.status,
           });
@@ -174,7 +196,9 @@ class BookController {
         worksheet.columns = [
           { header: "Title", key: "title", width: 35 },
           { header: "Author", key: "author", width: 35 },
-          { header: "DDC", key: "ddc", width: 15 },
+          { header: "Description", key: "description", width: 35 },
+          { header: "DDC Number", key: "ddc", width: 35 },
+          { header: "Copies", key: "copies", width: 35 },
           { header: "ACC Number", key: "acc_number", width: 15 },
           { header: "ategory", key: "category", width: 20 },
           { header: "Status", key: "status", width: 20 },

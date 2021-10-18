@@ -4,7 +4,9 @@ const bookValidation = (req, res, next) => {
   const book = {
     title: req.body.title,
     author: req.body.author,
+    description: req.body.description,
     ddc: req.body.ddc,
+    copies: req.body.copies,
     acc_number: req.body.acc_number,
     category: req.body.category,
     status: req.body.status,
@@ -13,23 +15,25 @@ const bookValidation = (req, res, next) => {
   const schema = Joi.object().keys({
     title: Joi.string().required().max(255),
     author: Joi.string().required().max(255),
+    description: Joi.string().required(),
     ddc: Joi.string().required().min(3).required().min(3),
+    copies: Joi.number().required(),
     acc_number: Joi.string().required().min(3),
     category: Joi.string()
       .valid(
-        "computer",
-        "engineering",
-        "busness",
-        "general",
-        "projects",
-        "indian"
+        "Computer",
+        "Engineering",
+        "Business",
+        "General",
+        "Projects",
+        "Indian"
       )
       .required(),
     status: Joi.string().valid(
-      "available",
-      "unavailable",
-      "reserved",
-      "borrowed"
+      "Available",
+      "Unavailable",
+      "Reserved",
+      "Borrowed"
     ),
     image: Joi.string().required().min(10),
   });

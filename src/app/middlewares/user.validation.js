@@ -5,6 +5,7 @@ export const registerValidation = (req, res, next) => {
     name: req.body.name,
     last_name: req.body.last_name,
     roll_number: req.body.roll_number,
+    course: req.body.course,
     email: req.body.email,
     phone_number: req.body.phone_number,
     password: req.body.password,
@@ -14,6 +15,7 @@ export const registerValidation = (req, res, next) => {
     name: Joi.string().min(3).max(30).required(),
     last_name: Joi.string().min(3).max(30).required(),
     roll_number: Joi.string().min(3).max(10).required(),
+    course: Joi.string().min(3).max(10).required(),
     email: Joi.string()
       .regex(/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/)
       .required(),
