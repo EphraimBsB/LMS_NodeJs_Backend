@@ -5,9 +5,9 @@ class BookController {
   }
   newBook = (req, res) => {
     const { book } = req;
-    const { ddc } = book;
+    const { title, ddc, acc_number, description, image } = book;
     this.service
-      .findBookbyDdc(ddc)
+      .findBookbyDdc(title, ddc, acc_number, description, image)
       .then((result) => {
         if (result) {
           res.status(409).json({
@@ -85,6 +85,7 @@ class BookController {
     this.service
       .findAllBooks()
       .then((result) => {
+        result.forEach((obj) => {});
         res.status(200).json({
           books: result,
         });
@@ -170,26 +171,24 @@ class BookController {
       });
   };
 
-  exportExcel = async (req, res) => {
+  exportExcel = (req, res) => {
     this.service
       .findAllBooks()
       .then((objs) => {
         let books = [];
-
         objs.forEach((obj) => {
           books.push({
             id: obj.id,
-            title: obj.Book.title,
-            author: obj.Book.author,
-            description: obj.Book.description,
-            ddc: obj.Book.ddc,
-            copies: obj.Book.copies,
-            acc_number: obj.Book.acc_number,
+            title: obj.title,
+            author: obj.author,
+            description: obj.description,
+            ddc: obj.ddc,
+            copies: obj.copies,
+            acc_number: obj.acc_number,
             category: obj.category,
             status: obj.status,
           });
         });
-
         this.workbook.removeWorksheet();
         let worksheet = this.workbook.addWorksheet("Books");
 
@@ -200,7 +199,7 @@ class BookController {
           { header: "DDC Number", key: "ddc", width: 35 },
           { header: "Copies", key: "copies", width: 35 },
           { header: "ACC Number", key: "acc_number", width: 15 },
-          { header: "ategory", key: "category", width: 20 },
+          { header: "Category", key: "category", width: 20 },
           { header: "Status", key: "status", width: 20 },
         ];
 
@@ -209,12 +208,12 @@ class BookController {
 
         const data = this.workbook.xlsx.writeFile("./excel.data/books.xlsx");
         res.status(200).json({
-          message: "Succefull",
+          message: "File Exported Succefully",
         });
       })
       .catch((err) => {
         res.status(500).json({
-          message: "Something went wrong",
+          message: "Something went wrong ON export",
           error: err,
         });
       });

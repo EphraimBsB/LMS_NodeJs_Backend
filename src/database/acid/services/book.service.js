@@ -15,14 +15,28 @@ class BookService {
     }
   };
 
-  findBookbyDdc = async (ddc) => {
-    const findBook = await model.Books.findOne({ where: { ddc } });
+  findBookbyDdc = async (title, ddc, acc_number, description, image) => {
+    const findBook = await model.Books.findOne({
+      where: { title, ddc, acc_number, description, image },
+    });
     return findBook;
   };
 
   find = async (id) => {
     const findBook = await model.Books.findOne({
       where: { id },
+      attributes: [
+        "id",
+        "title",
+        "author",
+        "description",
+        "ddc",
+        "acc_number",
+        "category",
+        "copies",
+        "status",
+        "image",
+      ],
       include: [
         {
           model: model.Location,

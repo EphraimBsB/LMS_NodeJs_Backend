@@ -37,14 +37,7 @@ module.exports = (sequelize, DataTypes) => {
       acc_number: DataTypes.STRING,
       copies: DataTypes.INTEGER,
       image: DataTypes.STRING,
-      category: DataTypes.ENUM(
-        "Computer",
-        "Engineering",
-        "Business",
-        "General",
-        "Projects",
-        "Indian"
-      ),
+      category: DataTypes.STRING,
       status: DataTypes.ENUM(
         "Available",
         "Unavailable",

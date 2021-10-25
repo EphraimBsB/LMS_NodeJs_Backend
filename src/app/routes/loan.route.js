@@ -6,6 +6,8 @@ router.post(
   "/",
   checkAuth,
   checkRole(["librarian", "admin", "student"]),
+  loanController.checkLoan,
+  loanController.checkUser,
   loanController.newLoan
 );
 router.patch(

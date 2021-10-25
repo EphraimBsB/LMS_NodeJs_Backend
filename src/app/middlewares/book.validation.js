@@ -19,16 +19,7 @@ const bookValidation = (req, res, next) => {
     ddc: Joi.string().required().min(3).required().min(3),
     copies: Joi.number().required(),
     acc_number: Joi.string().required().min(3),
-    category: Joi.string()
-      .valid(
-        "Computer",
-        "Engineering",
-        "Business",
-        "General",
-        "Projects",
-        "Indian"
-      )
-      .required(),
+    category: Joi.string().required(),
     status: Joi.string().valid(
       "Available",
       "Unavailable",

@@ -3,35 +3,60 @@ class LoanController {
     this.service = service;
     this.workbook = workbook;
   }
-  newLoan = async (req, res) => {
-    const { userId, bookId } = req.body;
+
+  checkLoan = async (req, res, next) => {
+    const { bookId } = req.body;
     await this.service
       .checkLoan(bookId)
       .then((result) => {
         if (result) {
-          res.status(409).json({
+          return res.status(409).json({
             message: "Loan already exist",
           });
-        } else {
-          this.service
-            .new(userId, bookId)
-            .then((result) => {
-              res.status(201).json({
-                loan: result,
-              });
-            })
-            .catch((err) => {
-              res.status(500).json({
-                message: "Something went wrong",
-                err: err.message,
-              });
-            });
         }
+        next();
       })
       .catch((err) => {
         res.status(500).json({
-          message: "Book does not exist",
-          err: err,
+          message: "Something went wrong",
+          err: err.message,
+        });
+      });
+  };
+
+  checkUser = async (req, res, next) => {
+    const { userId } = req.body;
+    await this.service
+      .checkUser(userId)
+      .then((result) => {
+        if (result) {
+          return res.status(409).json({
+            message: "Can't borrow two books at once",
+          });
+        }
+        next();
+      })
+      .catch((err) => {
+        res.status(500).json({
+          message: "Something went wrong",
+          err: err.message,
+        });
+      });
+  };
+
+  newLoan = async (req, res) => {
+    const { userId, bookId } = req.body;
+    this.service
+      .new(userId, bookId)
+      .then((result) => {
+        res.status(201).json({
+          loan: result,
+        });
+      })
+      .catch((err) => {
+        res.status(500).json({
+          message: "Something went wrong",
+          err: err.message,
         });
       });
   };
@@ -81,6 +106,7 @@ class LoanController {
           message: "Something went wrong",
           err: err.message,
         });
+        console.log(err);
       });
   };
 

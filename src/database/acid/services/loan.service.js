@@ -80,7 +80,10 @@ class LoanService {
     loans.forEach(async (element) => {
       const dueDate = element.dueDate;
       const overdueDate = new Date();
-      if (overdueDate.getTime() >= dueDate.getTime()) {
+      if (
+        overdueDate.getTime() >= dueDate.getTime() &&
+        element.returnDate == null
+      ) {
         element.update({
           status: "Overdue",
           where: { status: "Inprogress" },
@@ -116,6 +119,7 @@ class LoanService {
             "id",
             "title",
             "author",
+            "description",
             "ddc",
             "acc_number",
             "category",
@@ -130,6 +134,7 @@ class LoanService {
             "name",
             "last_name",
             "roll_number",
+            "course",
             "email",
             "phone_number",
           ],
@@ -162,6 +167,18 @@ class LoanService {
     return loan;
   };
 
+  checkUser = async (userId) => {
+    const loan = await model.Loans.findOne({
+      where: {
+        userId: userId,
+        [Op.and]: {
+          [Op.or]: [{ status: "Inprogress" }, { status: "Overdue" }],
+        },
+      },
+    });
+    return loan;
+  };
+
   userLoans = async (req) => {
     const { id } = req.params;
     const user = await model.User.findOne({
@@ -170,6 +187,7 @@ class LoanService {
         "id",
         "name",
         "last_name",
+        "course",
         "roll_number",
         "email",
         "phone_number",

@@ -25,10 +25,10 @@ module.exports = {
         type: Sequelize.TEXT,
       },
       acc_number: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
       },
       copies: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
       },
       category: {
         type: Sequelize.STRING,

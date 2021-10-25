@@ -32,7 +32,7 @@ export const comparePass = (req, res, data) => {
           role: data.role,
         },
         "secrete",
-        // { expiresIn: "1d" },
+        { expiresIn: "1d" },
         (_, token) => {
           res.status(200).json({
             message: "Authentification Successfuly",
