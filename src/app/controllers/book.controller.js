@@ -5,9 +5,9 @@ class BookController {
   }
   newBook = (req, res) => {
     const { book } = req;
-    const { title, ddc, acc_number, description, image } = book;
+    const { title, ddc, description, image } = book;
     this.service
-      .findBookbyDdc(title, ddc, acc_number, description, image)
+      .findBookbyDdc(title, ddc, description, image)
       .then((result) => {
         if (result) {
           res.status(409).json({
@@ -29,26 +29,6 @@ class BookController {
               });
             });
         }
-      })
-      .catch((err) => {
-        res.status(500).json({
-          message: "Something went wrong",
-          err: err.message,
-        });
-      });
-    this.service.createAcc(req);
-  };
-
-  accNUmbers = (req, res) => {
-    const { book } = req;
-    const { copies } = book;
-    this.service
-      .createAcc(copies)
-      .then((resust) => {
-        res.status(200).json({
-          message: "sucess",
-          book: resust,
-        });
       })
       .catch((err) => {
         res.status(500).json({
@@ -85,7 +65,6 @@ class BookController {
     this.service
       .findAllBooks()
       .then((result) => {
-        result.forEach((obj) => {});
         res.status(200).json({
           books: result,
         });
@@ -115,23 +94,16 @@ class BookController {
   };
 
   editbook = (req, res) => {
-    const editedBook = {
-      title: req.body.title,
-      author: req.body.author,
-      ddc: req.body.ddc,
-      acc_number: req.body.acc_number,
-      status: req.body.status,
-      image: req.body.image,
-    };
+    const { book } = req;
     const { id } = req.params;
     const obj = { where: { id } };
     this.service
-      .update(editedBook, obj)
+      .update(book, obj)
       .then((result) => {
         if (result[0] === 1) {
           res.status(200).json({
             message: "Book updated succefully",
-            book: editedBook,
+            book: book,
           });
         } else {
           res.status(404).json({
@@ -184,7 +156,7 @@ class BookController {
             description: obj.description,
             ddc: obj.ddc,
             copies: obj.copies,
-            acc_number: obj.acc_number,
+            stock: obj.stock,
             category: obj.category,
             status: obj.status,
           });

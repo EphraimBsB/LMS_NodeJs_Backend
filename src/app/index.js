@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/book", bookRoute);
-app.use("/users", userRouter);
+app.use("/user", userRouter);
 app.use("/loan", loanRoute);
 // app.use("/image", imageRoute);
 

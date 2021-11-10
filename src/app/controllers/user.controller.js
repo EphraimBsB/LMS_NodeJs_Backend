@@ -14,15 +14,15 @@ class UserController {
   // eslint-disable-next-line consistent-return
   signup = async (req, res) => {
     const { user } = req;
-    const { roll_number } = user;
+    const { roll_number, email, phone_number } = user;
 
     await this.service
-      .findUser(roll_number)
+      .checkUser(roll_number, email, phone_number)
       .then((userFind) => {
         if (userFind) {
           return res.status(409).json({
             status: 409,
-            message: "Roll Number already exist",
+            message: "User already exist",
           });
         }
         this.hashPassword(user)
@@ -85,13 +85,37 @@ class UserController {
     this.service
       .findAllUser()
       .then((result) => {
-        res.status(200).json(result);
+        res.status(200).json({ users: result });
       })
       .catch((error) => {
         res.status(500).json({
           status: 500,
           message: "Something wrong",
           error: error.name,
+        });
+      });
+  };
+
+  deleteUser = (req, res) => {
+    const { id } = req.params;
+    const obj = { where: { id } };
+    this.service
+      .delete(obj)
+      .then((result) => {
+        if (result) {
+          res.status(200).json({
+            message: "User Deleted succefully",
+          });
+        } else {
+          res.status(404).json({
+            message: "Not Found",
+          });
+        }
+      })
+      .catch((err) => {
+        res.status(500).json({
+          message: "Something went wrong",
+          error: err.name,
         });
       });
   };

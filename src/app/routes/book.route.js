@@ -12,20 +12,8 @@ router.post(
   checkRole(["librarian", "admin"]),
   bookController.newBook
 );
-router.post(
-  "/acc_numbers",
-  // bookValidation,
-  // checkAuth,
-  // checkRole(["librarian", "admin"]),
-  bookController.accNUmbers
-);
 router.get("/books/:id", bookController.findBook);
-router.get(
-  "/books",
-  // checkAuth,
-  // checkRole(["librarian", "admin", "student"]),
-  bookController.findAll
-);
+router.get("/books", bookController.findAll);
 router.get("/search", bookController.search);
 router.patch(
   "/:id",
@@ -43,7 +31,6 @@ router.delete(
 router.post(
   "/location",
   bookLocationValidation,
-  // checkAuth,
   bookLocationController.createLocation
 );
 router.get("/export", bookController.exportExcel);

@@ -15,6 +15,17 @@ router.post(
   // checkRole(["librarian", "admin"]),
   userController.signup
 );
-router.get("/users", userController.allUsers);
+router.get(
+  "/users",
+  // checkAuth,
+  // checkRole(["librarian", "admin"]),
+  userController.allUsers
+);
+router.delete(
+  "/:id",
+  checkAuth,
+  checkRole(["librarian", "admin"]),
+  userController.deleteUser
+);
 
 export default router;

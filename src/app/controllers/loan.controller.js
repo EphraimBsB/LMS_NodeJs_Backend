@@ -4,26 +4,6 @@ class LoanController {
     this.workbook = workbook;
   }
 
-  checkLoan = async (req, res, next) => {
-    const { bookId } = req.body;
-    await this.service
-      .checkLoan(bookId)
-      .then((result) => {
-        if (result) {
-          return res.status(409).json({
-            message: "Loan already exist",
-          });
-        }
-        next();
-      })
-      .catch((err) => {
-        res.status(500).json({
-          message: "Something went wrong",
-          err: err.message,
-        });
-      });
-  };
-
   checkUser = async (req, res, next) => {
     const { userId } = req.body;
     await this.service
@@ -106,7 +86,6 @@ class LoanController {
           message: "Something went wrong",
           err: err.message,
         });
-        console.log(err);
       });
   };
 

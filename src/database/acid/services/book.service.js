@@ -1,4 +1,3 @@
-import { async } from "regenerator-runtime";
 import model from "./../../models";
 import { Op } from "sequelize";
 class BookService {
@@ -7,17 +6,16 @@ class BookService {
     return newbook;
   };
 
-  createAcc = async (req) => {
-    const { book } = req;
-    const { copies } = book;
-    for (let acc_number = 0; acc_number < copies; acc_number++) {
-      await model.AccNumbers.create({ acc_number });
-    }
-  };
-
-  findBookbyDdc = async (title, ddc, acc_number, description, image) => {
+  findBookbyDdc = async (title, ddc, description, image) => {
     const findBook = await model.Books.findOne({
-      where: { title, ddc, acc_number, description, image },
+      where: {
+        [Op.or]: [
+          { title: title },
+          { ddc: ddc },
+          { description: description },
+          { image: image },
+        ],
+      },
     });
     return findBook;
   };
@@ -31,9 +29,9 @@ class BookService {
         "author",
         "description",
         "ddc",
-        "acc_number",
         "category",
         "copies",
+        "stock",
         "status",
         "image",
       ],
@@ -41,7 +39,6 @@ class BookService {
         {
           model: model.Location,
           attributes: ["block", "column", "section", "row", "ddc"],
-          // as: "location",
         },
       ],
     });
@@ -67,9 +64,9 @@ class BookService {
         "author",
         "description",
         "ddc",
-        "acc_number",
         "category",
         "copies",
+        "stock",
         "status",
         "image",
         "createdAt",
@@ -81,6 +78,11 @@ class BookService {
         },
       ],
       order: [["id", "DESC"]],
+    });
+    BooksFindAll.forEach(async (element) => {
+      if (element.stock == 0) {
+        element.update({ status: "Borrowed" });
+      }
     });
     return BooksFindAll;
   };
@@ -107,9 +109,9 @@ class BookService {
         "author",
         "description",
         "ddc",
-        "acc_number",
         "category",
         "copies",
+        "stock",
         "status",
         "image",
         "createdAt",

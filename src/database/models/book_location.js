@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       Location.belongsTo(Books, {
         foreignKey: "bookId",
         targetKey: "id",
+        onDelete: "CASCADE",
       });
     }
   }

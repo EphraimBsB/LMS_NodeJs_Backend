@@ -1,21 +1,21 @@
 import model from "../../models";
 import { Op } from "sequelize";
-import { async } from "regenerator-runtime";
 
 class LoanService {
-  constructor() {
-    let timerId;
-    this.timerId = timerId;
-  }
-
   new = async (userId, bookId) => {
-    // const { userId, bookId } = req.body;
     let issueDate = new Date();
-    let dueDate = new Date(issueDate.getTime() + 7 * 24 * 60 * 60 * 1000);
+    let dueDate;
     const returnDate = null;
     let status = "Inprogress";
     const user = await model.User.findOne({ where: { id: userId } });
     const book = await model.Books.findOne({ where: { id: bookId } });
+    if (user.degree === "undergraduate") {
+      dueDate = new Date(issueDate.getTime() + 7 * 24 * 60 * 60 * 1000);
+    } else if (user.degree === "postgraduate") {
+      dueDate = new Date(issueDate.getTime() + 14 * 24 * 60 * 60 * 1000);
+    } else if (user.degree === "lecturer") {
+      dueDate = new Date(issueDate.getTime() + 21 * 24 * 60 * 60 * 1000);
+    }
     const newloan = await model.Loans.create({
       userId,
       bookId,
@@ -28,14 +28,17 @@ class LoanService {
       where: { id: bookId },
     });
 
-    findBook.update({ status: "Borrowed" });
+    if (findBook.stock > 0) {
+      let newStock = findBook.stock - 1;
+      findBook.update({ stock: newStock });
+    } else if (findBook.stock == 0) {
+      findBook.update({ status: "Borrowed" });
+    }
 
     return newloan;
   };
 
   findAllLoans = async () => {
-    // let issueDate = new Date();
-    // let dueDate = new Date(issueDate.getTime() + 7 * 24 * 60 * 60 * 1000);
     const loans = await model.Loans.findAll({
       attributes: [
         "id",
@@ -57,7 +60,6 @@ class LoanService {
             "author",
             "description",
             "ddc",
-            "acc_number",
             "category",
             "copies",
             "status",
@@ -98,7 +100,7 @@ class LoanService {
 
   findaLoan = async (req) => {
     const { id } = req.params;
-    let { action } = req.body;
+    let { action, newDueDate } = req.body;
     const loan = await model.Loans.findOne({
       attributes: [
         "id",
@@ -121,7 +123,6 @@ class LoanService {
             "author",
             "description",
             "ddc",
-            "acc_number",
             "category",
             "status",
             "image",
@@ -145,14 +146,30 @@ class LoanService {
       const findBook = await model.Books.findOne({
         where: { id: loan.bookId },
       });
+      if (loan.status === "Returned") {
+        return loan;
+      } else {
+        await loan.update({
+          returnDate: new Date(),
+          status: "Returned",
+        });
+        let newStock = parseInt(findBook.stock) + 1;
+        await findBook.update({ status: "Available", stock: newStock });
+      }
 
-      findBook.update({ status: "Available" });
-      loan.update({
-        returnDate: new Date(),
-        status: "Returned",
-      });
+      // if(newDueDate){
+      //   await loan.update({
+      //     dueDate: newDueDate,
+      //   });
+      // }
     }
     return loan;
+  };
+
+  extend = async (req) => {
+    const { id } = req.params;
+    const { newDueDate } = req.body;
+    const loan = await model.Loans.findOne();
   };
 
   checkLoan = async (bookId) => {
@@ -213,7 +230,6 @@ class LoanService {
             "title",
             "author",
             "ddc",
-            "acc_number",
             "category",
             "status",
             "image",

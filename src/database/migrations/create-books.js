@@ -24,10 +24,10 @@ module.exports = {
       description: {
         type: Sequelize.TEXT,
       },
-      acc_number: {
+      copies: {
         type: Sequelize.STRING,
       },
-      copies: {
+      stock: {
         type: Sequelize.STRING,
       },
       category: {

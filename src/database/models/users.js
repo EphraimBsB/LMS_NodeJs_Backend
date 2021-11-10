@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate({ Books, Loans }) {
       this.hasMany(Loans, {
         foreignKey: "userId",
-        onDelete: "cascade",
+        onDelete: "CASCADE",
       });
 
       this.hasMany(Books, {
@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
       last_name: DataTypes.STRING,
       roll_number: DataTypes.STRING,
       course: DataTypes.STRING,
+      degree: DataTypes.STRING,
       email: DataTypes.STRING,
       phone_number: DataTypes.STRING,
       password: DataTypes.STRING,

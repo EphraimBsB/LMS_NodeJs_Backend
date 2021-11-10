@@ -11,16 +11,18 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(User, {
         foreignKey: "userId",
         targetKey: "id",
+        onDelete: "RESTRICT",
+        onUpdate: "RESTRICT",
       });
 
       this.hasOne(Loans, {
         foreignKey: "bookId",
-        onDelete: "cascade",
+        onDelete: "CASCADE",
       });
 
       this.hasOne(Location, {
         foreignKey: "bookId",
-        onDelete: "cascade",
+        onDelete: "CASCADE",
       });
     }
   }
@@ -34,8 +36,8 @@ module.exports = (sequelize, DataTypes) => {
       title: DataTypes.TEXT,
       author: DataTypes.TEXT,
       description: DataTypes.TEXT,
-      acc_number: DataTypes.STRING,
       copies: DataTypes.INTEGER,
+      stock: DataTypes.INTEGER,
       image: DataTypes.STRING,
       category: DataTypes.STRING,
       status: DataTypes.ENUM(

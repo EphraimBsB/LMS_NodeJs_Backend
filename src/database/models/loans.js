@@ -11,10 +11,12 @@ module.exports = (sequelize, DataTypes) => {
       Loans.belongsTo(User, {
         foreignKey: "userID",
         targetKey: "id",
+        onDelete: "CASCADE",
       });
       Loans.belongsTo(Books, {
         foreignKey: "bookId",
         targetKey: "id",
+        onDelete: "CASCADE",
       });
     }
   }

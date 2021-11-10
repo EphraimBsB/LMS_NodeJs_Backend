@@ -7,7 +7,7 @@ const bookValidation = (req, res, next) => {
     description: req.body.description,
     ddc: req.body.ddc,
     copies: req.body.copies,
-    acc_number: req.body.acc_number,
+    stock: req.body.copies,
     category: req.body.category,
     status: req.body.status,
     image: req.body.image,
@@ -18,7 +18,7 @@ const bookValidation = (req, res, next) => {
     description: Joi.string().required(),
     ddc: Joi.string().required().min(3).required().min(3),
     copies: Joi.number().required(),
-    acc_number: Joi.string().required().min(3),
+    stock: Joi.number().required(),
     category: Joi.string().required(),
     status: Joi.string().valid(
       "Available",

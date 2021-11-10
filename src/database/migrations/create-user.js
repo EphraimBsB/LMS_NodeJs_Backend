@@ -19,6 +19,9 @@ module.exports = {
       course: {
         type: Sequelize.STRING,
       },
+      degree: {
+        type: Sequelize.STRING,
+      },
       email: {
         type: Sequelize.STRING,
       },
