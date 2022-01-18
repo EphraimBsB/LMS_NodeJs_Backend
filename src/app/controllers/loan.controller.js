@@ -7,12 +7,15 @@ class LoanController {
   checkUser = async (req, res, next) => {
     const { userId } = req.body;
     await this.service
-      .checkUser(userId)
-      .then((result) => {
-        if (result) {
-          return res.status(409).json({
-            message: "Can't borrow two books at once",
-          });
+      .checkLoan(userId)
+      .then(async (response) => {
+        if (response) {
+          let user = await this.service.checkUser(userId);
+          if (user) {
+            return res.status(409).json({
+              message: "Can't borrow two books at once",
+            });
+          }
         }
         next();
       })
@@ -25,9 +28,9 @@ class LoanController {
   };
 
   newLoan = async (req, res) => {
-    const { userId, bookId } = req.body;
+    const { userId, bookId, acc_num } = req.body;
     this.service
-      .new(userId, bookId)
+      .new(userId, bookId, acc_num)
       .then((result) => {
         res.status(201).json({
           loan: result,

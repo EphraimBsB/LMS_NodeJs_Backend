@@ -15,6 +15,9 @@ module.exports = {
       ddc: {
         type: Sequelize.STRING,
       },
+      acc_num: {
+        type: Sequelize.STRING,
+      },
       title: {
         type: Sequelize.TEXT,
       },
@@ -30,7 +33,10 @@ module.exports = {
       stock: {
         type: Sequelize.STRING,
       },
-      category: {
+      subjects: {
+        type: Sequelize.STRING,
+      },
+      pub_year: {
         type: Sequelize.STRING,
       },
       status: {

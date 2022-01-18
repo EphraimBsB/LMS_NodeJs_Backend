@@ -94,16 +94,26 @@ class BookController {
   };
 
   editbook = (req, res) => {
-    const { book } = req;
+    const editBook = {
+      title: req.body.title,
+      author: req.body.author,
+      description: req.body.description,
+      ddc: req.body.ddc,
+      copies: req.body.copies,
+      stock: req.body.copies,
+      subjects: req.body.subjects,
+      status: req.body.status,
+      image: req.body.image,
+    };
     const { id } = req.params;
     const obj = { where: { id } };
     this.service
-      .update(book, obj)
+      .update(editBook, obj)
       .then((result) => {
         if (result[0] === 1) {
           res.status(200).json({
             message: "Book updated succefully",
-            book: book,
+            editBook: editBook,
           });
         } else {
           res.status(404).json({
@@ -157,7 +167,7 @@ class BookController {
             ddc: obj.ddc,
             copies: obj.copies,
             stock: obj.stock,
-            category: obj.category,
+            subjects: obj.subjects,
             status: obj.status,
           });
         });
@@ -171,7 +181,7 @@ class BookController {
           { header: "DDC Number", key: "ddc", width: 35 },
           { header: "Copies", key: "copies", width: 35 },
           { header: "ACC Number", key: "acc_number", width: 15 },
-          { header: "Category", key: "category", width: 20 },
+          { header: "subjects", key: "subjects", width: 20 },
           { header: "Status", key: "status", width: 20 },
         ];
 

@@ -2,19 +2,32 @@ import model from "../../models";
 import { Op } from "sequelize";
 
 class LoanService {
-  new = async (userId, bookId) => {
+  new = async (userId, bookId, acc_num) => {
     let issueDate = new Date();
     let dueDate;
     const returnDate = null;
     let status = "Inprogress";
+
     const user = await model.User.findOne({ where: { id: userId } });
-    const book = await model.Books.findOne({ where: { id: bookId } });
     if (user.degree === "undergraduate") {
       dueDate = new Date(issueDate.getTime() + 7 * 24 * 60 * 60 * 1000);
     } else if (user.degree === "postgraduate") {
       dueDate = new Date(issueDate.getTime() + 14 * 24 * 60 * 60 * 1000);
     } else if (user.degree === "lecturer") {
-      dueDate = new Date(issueDate.getTime() + 21 * 24 * 60 * 60 * 1000);
+      dueDate = new Date(issueDate.getTime() + 120 * 24 * 60 * 60 * 1000);
+    }
+
+    const book = await model.Books.findOne({ where: { id: bookId } });
+    let accNum = book.acc_num.split(",");
+    if (book.stock > 0 || accNum.includes(acc_num)) {
+      let newStock = book.stock - 1;
+      let index = accNum.indexOf(acc_num);
+      if (index > -1) {
+        let newAccNum = accNum.splice(index, 1).toString();
+        book.update({ stock: newStock, acc_num: newAccNum });
+      }
+    } else if (book.stock == 0) {
+      book.update({ status: "Borrowed" });
     }
     const newloan = await model.Loans.create({
       userId,
@@ -24,16 +37,6 @@ class LoanService {
       returnDate,
       status,
     });
-    const findBook = await model.Books.findOne({
-      where: { id: bookId },
-    });
-
-    if (findBook.stock > 0) {
-      let newStock = findBook.stock - 1;
-      findBook.update({ stock: newStock });
-    } else if (findBook.stock == 0) {
-      findBook.update({ status: "Borrowed" });
-    }
 
     return newloan;
   };
@@ -60,7 +63,7 @@ class LoanService {
             "author",
             "description",
             "ddc",
-            "category",
+            "subjects",
             "copies",
             "status",
             "image",
@@ -123,7 +126,7 @@ class LoanService {
             "author",
             "description",
             "ddc",
-            "category",
+            "subjects",
             "status",
             "image",
           ],
@@ -156,35 +159,15 @@ class LoanService {
         let newStock = parseInt(findBook.stock) + 1;
         await findBook.update({ status: "Available", stock: newStock });
       }
-
-      // if(newDueDate){
-      //   await loan.update({
-      //     dueDate: newDueDate,
-      //   });
-      // }
+    } else if (newDueDate) {
+      await loan.update({
+        dueDate: newDueDate,
+      });
     }
     return loan;
   };
 
-  extend = async (req) => {
-    const { id } = req.params;
-    const { newDueDate } = req.body;
-    const loan = await model.Loans.findOne();
-  };
-
-  checkLoan = async (bookId) => {
-    const loan = await model.Loans.findOne({
-      where: {
-        bookId: bookId,
-        [Op.and]: {
-          [Op.or]: [{ status: "Inprogress" }, { status: "Overdue" }],
-        },
-      },
-    });
-    return loan;
-  };
-
-  checkUser = async (userId) => {
+  checkLoan = async (userId) => {
     const loan = await model.Loans.findOne({
       where: {
         userId: userId,
@@ -194,6 +177,11 @@ class LoanService {
       },
     });
     return loan;
+  };
+
+  checkUser = async (userId) => {
+    const user = await model.User.findOne({ where: { id: userId } });
+    if (user.degree === "undergraduate") return user;
   };
 
   userLoans = async (req) => {
@@ -230,7 +218,7 @@ class LoanService {
             "title",
             "author",
             "ddc",
-            "category",
+            "subjects",
             "status",
             "image",
           ],

@@ -17,7 +17,7 @@ router.get("/books", bookController.findAll);
 router.get("/search", bookController.search);
 router.patch(
   "/:id",
-  bookValidation,
+  // bookValidation,
   checkAuth,
   checkRole(["librarian", "admin"]),
   bookController.editbook

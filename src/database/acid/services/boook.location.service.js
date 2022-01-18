@@ -3,13 +3,14 @@ import model from "./../../models";
 class BookLocationService {
   createBookLocation = async (req) => {
     const { location } = req;
-    const { bookId, block, column, row } = location;
+    const { bookId, shelf, side, column, row } = location;
     const book = await model.Books.findOne({ where: { id: bookId } });
     const bookLocation = await model.Location.create({
       bookId,
-      block,
+      shelf,
+      side,
       column,
-      section: book.category,
+      section: book.subjects,
       row,
       ddc: book.ddc,
     });
@@ -19,6 +20,11 @@ class BookLocationService {
   find = async (bookId) => {
     const findBook = await model.Location.findOne({ where: { bookId } });
     return findBook;
+  };
+
+  update = async (location, id) => {
+    const upDate = await model.Location.update(location, id);
+    return upDate;
   };
 }
 

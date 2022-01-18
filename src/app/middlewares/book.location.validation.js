@@ -3,14 +3,16 @@ import Joi from "joi";
 const bookLocationValidation = (req, res, next) => {
   const location = {
     bookId: req.body.bookId,
-    block: req.body.block,
+    shelf: req.body.shelf,
+    side: req.body.side,
     column: req.body.column,
     row: req.body.row,
   };
 
   const schema = Joi.object().keys({
     bookId: Joi.number().integer().required(),
-    block: Joi.number().integer().required(),
+    shelf: Joi.string().required(),
+    side: Joi.string().required(),
     column: Joi.number().integer().required(),
     row: Joi.number().integer().required(),
   });
