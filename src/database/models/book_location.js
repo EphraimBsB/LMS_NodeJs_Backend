@@ -18,7 +18,8 @@ module.exports = (sequelize, DataTypes) => {
   Location.init(
     {
       bookId: DataTypes.INTEGER,
-      block: DataTypes.INTEGER,
+      shelf: DataTypes.STRING,
+      side: DataTypes.STRING,
       column: DataTypes.INTEGER,
       section: DataTypes.STRING,
       row: DataTypes.INTEGER,

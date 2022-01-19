@@ -12,8 +12,11 @@ module.exports = {
         type: Sequelize.INTEGER,
         foreignKey: true,
       },
-      block: {
-        type: Sequelize.INTEGER,
+      shelf: {
+        type: Sequelize.STRING,
+      },
+      side: {
+        type: Sequelize.STRING,
       },
       column: {
         type: Sequelize.INTEGER,
