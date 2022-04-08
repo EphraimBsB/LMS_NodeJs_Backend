@@ -2,7 +2,7 @@ import model from "../../models";
 import { Op } from "sequelize";
 
 class LoanService {
-  new = async (userId, bookId, acc_num) => {
+  new = async (userId, bookId, bookAccNo) => {
     let issueDate = new Date();
     let dueDate;
     const returnDate = null;
@@ -18,27 +18,30 @@ class LoanService {
     }
 
     const book = await model.Books.findOne({ where: { id: bookId } });
-    let accNum = book.acc_num.split(",");
-    if (book.stock > 0 || accNum.includes(acc_num)) {
+    let accNum = await book.acc_num.split(",");
+    if (book.stock > 0 && accNum.includes(bookAccNo)) {
+      const newloan = await model.Loans.create({
+        userId,
+        bookId,
+        bookAccNo,
+        issueDate,
+        dueDate,
+        returnDate,
+        status,
+      });
+
       let newStock = book.stock - 1;
-      let index = accNum.indexOf(acc_num);
+      let index = accNum.indexOf(bookAccNo);
       if (index > -1) {
-        let newAccNum = accNum.splice(index, 1).toString();
+        accNum.splice(index, 1);
+        let newAccNum = accNum.toString();
         book.update({ stock: newStock, acc_num: newAccNum });
       }
+
+      return newloan;
     } else if (book.stock == 0) {
       book.update({ status: "Borrowed" });
     }
-    const newloan = await model.Loans.create({
-      userId,
-      bookId,
-      issueDate,
-      dueDate,
-      returnDate,
-      status,
-    });
-
-    return newloan;
   };
 
   findAllLoans = async () => {
@@ -47,6 +50,7 @@ class LoanService {
         "id",
         "userId",
         "bookId",
+        "bookAccNo",
         "issueDate",
         "dueDate",
         "returnDate",
@@ -103,12 +107,13 @@ class LoanService {
 
   findaLoan = async (req) => {
     const { id } = req.params;
-    let { action, newDueDate } = req.body;
+    let { action, bookAccNo } = req.body;
     const loan = await model.Loans.findOne({
       attributes: [
         "id",
         "userId",
         "bookId",
+        "bookAccNo",
         "issueDate",
         "dueDate",
         "returnDate",
@@ -145,10 +150,12 @@ class LoanService {
         },
       ],
     });
-    if (action === "return") {
+    if (action === "return" && bookAccNo == loan.bookAccNo) {
       const findBook = await model.Books.findOne({
         where: { id: loan.bookId },
       });
+      let accNum = findBook.acc_num.split(",");
+
       if (loan.status === "Returned") {
         return loan;
       } else {
@@ -157,13 +164,20 @@ class LoanService {
           status: "Returned",
         });
         let newStock = parseInt(findBook.stock) + 1;
-        await findBook.update({ status: "Available", stock: newStock });
+        accNum.unshift(bookAccNo);
+        accNum.sort();
+        await findBook.update({
+          status: "Available",
+          stock: newStock,
+          acc_num: accNum.toString(),
+        });
       }
-    } else if (newDueDate) {
-      await loan.update({
-        dueDate: newDueDate,
-      });
     }
+    // else if (newDueDate) {
+    //   await loan.update({
+    //     dueDate: newDueDate,
+    //   });
+    // }
     return loan;
   };
 

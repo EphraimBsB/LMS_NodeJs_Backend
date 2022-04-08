@@ -30,6 +30,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         foreignKey: true,
       },
+      bookAccNo: DataTypes.STRING,
       issueDate: DataTypes.DATE,
       dueDate: DataTypes.DATE,
       returnDate: DataTypes.BOOLEAN,

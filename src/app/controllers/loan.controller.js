@@ -28,9 +28,9 @@ class LoanController {
   };
 
   newLoan = async (req, res) => {
-    const { userId, bookId, acc_num } = req.body;
+    const { userId, bookId, bookAccNo } = req.body;
     this.service
-      .new(userId, bookId, acc_num)
+      .new(userId, bookId, bookAccNo)
       .then((result) => {
         res.status(201).json({
           loan: result,

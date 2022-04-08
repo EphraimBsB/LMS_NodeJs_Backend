@@ -16,6 +16,9 @@ module.exports = {
         type: Sequelize.INTEGER,
         foreignKey: true,
       },
+      bookAccNo: {
+        type: Sequelize.STRING,
+      },
       issueDate: {
         type: Sequelize.DATE,
       },
