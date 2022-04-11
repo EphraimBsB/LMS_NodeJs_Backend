@@ -219,6 +219,7 @@ class LoanService {
         "id",
         "userId",
         "bookId",
+        "bookAccNo",
         "issueDate",
         "dueDate",
         "returnDate",
