@@ -19,11 +19,6 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "bookId",
         onDelete: "CASCADE",
       });
-
-      this.hasOne(Location, {
-        foreignKey: "bookId",
-        onDelete: "CASCADE",
-      });
     }
   }
   Books.init(
@@ -42,12 +37,17 @@ module.exports = (sequelize, DataTypes) => {
       image: DataTypes.STRING,
       subjects: DataTypes.STRING,
       pub_year: DataTypes.STRING,
+      ebook: DataTypes.STRING,
       status: DataTypes.ENUM(
         "Available",
         "Unavailable",
         "Reserved",
         "Borrowed"
       ),
+      shelf: DataTypes.STRING,
+      side: DataTypes.STRING,
+      column: DataTypes.INTEGER,
+      row: DataTypes.INTEGER,
     },
     {
       sequelize,

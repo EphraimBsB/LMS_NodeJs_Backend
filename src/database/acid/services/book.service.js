@@ -6,15 +6,15 @@ class BookService {
     return newbook;
   };
 
-  findBookbyDdc = async (title, ddc, description, image) => {
+  saveImg = async (path) => {
+    var img = await model.Books.create({ image: path });
+    return img;
+  };
+
+  findBookbyDdc = async (title, ddc, description) => {
     const findBook = await model.Books.findOne({
       where: {
-        [Op.or]: [
-          { title: title },
-          { ddc: ddc },
-          { description: description },
-          { image: image },
-        ],
+        [Op.or]: [{ title: title }, { ddc: ddc }, { description: description }],
       },
     });
     return findBook;
@@ -28,18 +28,19 @@ class BookService {
         "title",
         "author",
         "description",
+        "pub_year",
         "ddc",
+        "acc_num",
         "subjects",
         "copies",
         "stock",
-        "status",
+        "ebook",
         "image",
-      ],
-      include: [
-        {
-          model: model.Location,
-          attributes: ["shelf", "side", "column", "section", "row", "ddc"],
-        },
+        "status",
+        "shelf",
+        "side",
+        "column",
+        "row",
       ],
     });
     return findBook;
@@ -63,21 +64,20 @@ class BookService {
         "title",
         "author",
         "description",
+        "pub_year",
         "ddc",
         "acc_num",
         "subjects",
         "copies",
         "stock",
-        "status",
-        "pub_year",
+        "ebook",
         "image",
+        "status",
+        "shelf",
+        "side",
+        "column",
+        "row",
         "createdAt",
-      ],
-      include: [
-        {
-          model: model.Location,
-          attributes: ["shelf", "side", "column", "section", "row", "ddc"],
-        },
       ],
       order: [["id", "DESC"]],
     });
@@ -110,21 +110,20 @@ class BookService {
         "title",
         "author",
         "description",
+        "pub_year",
         "ddc",
         "acc_num",
         "subjects",
         "copies",
         "stock",
-        "status",
-        "pub_year",
+        "ebook",
         "image",
+        "status",
+        "shelf",
+        "side",
+        "column",
+        "row",
         "createdAt",
-      ],
-      include: [
-        {
-          model: model.Location,
-          attributes: ["shelf", "side", "column", "section", "row", "ddc"],
-        },
       ],
       order: [["id", "DESC"]],
     });

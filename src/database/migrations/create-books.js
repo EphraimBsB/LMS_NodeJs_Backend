@@ -12,12 +12,6 @@ module.exports = {
         type: Sequelize.INTEGER,
         foreignKey: true,
       },
-      ddc: {
-        type: Sequelize.STRING,
-      },
-      acc_num: {
-        type: Sequelize.STRING,
-      },
       title: {
         type: Sequelize.TEXT,
       },
@@ -27,16 +21,28 @@ module.exports = {
       description: {
         type: Sequelize.TEXT,
       },
+      pub_year: {
+        type: Sequelize.STRING,
+      },
+      ddc: {
+        type: Sequelize.STRING,
+      },
+      acc_num: {
+        type: Sequelize.STRING,
+      },
+      subjects: {
+        type: Sequelize.STRING,
+      },
       copies: {
         type: Sequelize.STRING,
       },
       stock: {
         type: Sequelize.STRING,
       },
-      subjects: {
+      ebook: {
         type: Sequelize.STRING,
       },
-      pub_year: {
+      image: {
         type: Sequelize.STRING,
       },
       status: {
@@ -48,8 +54,17 @@ module.exports = {
         ),
         defaultValue: "Available",
       },
-      image: {
+      shelf: {
         type: Sequelize.STRING,
+      },
+      side: {
+        type: Sequelize.STRING,
+      },
+      column: {
+        type: Sequelize.INTEGER,
+      },
+      row: {
+        type: Sequelize.INTEGER,
       },
       createdAt: {
         allowNull: false,
