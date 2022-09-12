@@ -9,7 +9,7 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       userId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         foreignKey: true,
       },
       bookId: {
@@ -29,8 +29,8 @@ module.exports = {
         type: Sequelize.DATE,
       },
       status: {
-        type: Sequelize.ENUM("Inprogress", "Overdue", "Returned"),
-        defaultValue: "Inprogress",
+        type: Sequelize.ENUM("Processing", "Borrowed", "Overdue", "Returned"),
+        defaultValue: "Processing",
       },
       createdAt: {
         allowNull: false,

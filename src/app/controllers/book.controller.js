@@ -4,15 +4,11 @@ class BookController {
     this.service = service;
     this.workbook = workbook;
   }
-  // newBook = (req, res) => {
-  //   console.log("Body: %j", req.body);
-  //   console.log(req.file);
-  // };
   newBook = (req, res) => {
     const { book } = req;
-    const { title, ddc, description } = book;
+    const { title, ddc, description, image } = book;
     this.service
-      .findBookbyDdc(title, ddc, description)
+      .findBookbyDdc(title, ddc, description, image)
       .then((result) => {
         if (result) {
           res.status(409).json({
@@ -117,6 +113,22 @@ class BookController {
       .catch((error) => {
         res.status(500).json({
           message: "Something wrong, can't search",
+          error: error,
+        });
+      });
+  };
+
+  filter = (req, res) => {
+    let { keyword } = req.query;
+
+    this.service
+      .filterBooks(keyword)
+      .then((result) => {
+        res.status(200).json({ books: result });
+      })
+      .catch((error) => {
+        res.status(500).json({
+          message: "Something wrong, can't Filter Books",
           error: error,
         });
       });

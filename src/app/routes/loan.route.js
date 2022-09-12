@@ -4,8 +4,8 @@ import { checkAuth, checkRole } from "../middlewares/check.auth";
 const router = express.Router();
 router.post(
   "/",
-  checkAuth,
-  checkRole(["librarian", "admin", "student"]),
+  // checkAuth,
+  // checkRole(["librarian", "admin", "student"]),
   loanController.checkUser,
   loanController.newLoan
 );
@@ -15,6 +15,7 @@ router.patch(
   checkRole(["librarian", "admin", "student"]),
   loanController.findall
 );
+router.get("/filter_loans", loanController.filter);
 router.patch(
   "/loans/:id",
   checkAuth,

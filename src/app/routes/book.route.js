@@ -9,8 +9,8 @@ import uploadImage from "../middlewares/book.image.upd";
 const router = express.Router();
 router.post(
   "/",
-  // checkAuth,
-  // checkRole(["librarian", "admin"]),
+  checkAuth,
+  checkRole(["librarian", "admin"]),
   uploadImage.fields([
     { name: "image", maxCount: 1 },
     { name: "ebook", maxCount: 1 },
@@ -26,6 +26,7 @@ router.post(
 router.get("/books/:id", bookController.findBook);
 router.get("/books", bookController.findAll);
 router.get("/search", bookController.search);
+router.get("/filter", bookController.filter);
 router.patch(
   "/:id",
   checkAuth,

@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
       role: {
         type: DataTypes.STRING,
         default: "student",
-        enum: ["librarian", "student", "admin"],
+        enum: ["librarian", "student", "lecturer", "guest","admin"],
       },
     },
     {

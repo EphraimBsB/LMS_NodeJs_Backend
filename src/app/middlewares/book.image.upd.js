@@ -13,7 +13,7 @@ var storage = diskStorage({
   filename: (req, file, cb) => {
     cb(
       null,
-      file.originalname + "-" + Date.now() + path.extname(file.originalname)
+      file.originalname 
     );
   },
 });

@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate({ User, Books }) {
       Loans.belongsTo(User, {
         foreignKey: "userID",
-        targetKey: "id",
+        targetKey: "roll_number",
         onDelete: "CASCADE",
       });
       Loans.belongsTo(Books, {
@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
   Loans.init(
     {
       userId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         foreignKey: true,
       },
       bookId: {
@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
       issueDate: DataTypes.DATE,
       dueDate: DataTypes.DATE,
       returnDate: DataTypes.BOOLEAN,
-      status: DataTypes.ENUM("Inprogress", "Overdue", "Returned"),
+      status: DataTypes.ENUM("Processing", "Borrowed", "Overdue", "Returned"),
     },
     {
       sequelize,
