@@ -9,12 +9,15 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       userId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         foreignKey: true,
       },
       bookId: {
         type: Sequelize.INTEGER,
         foreignKey: true,
+      },
+      bookAccNo: {
+        type: Sequelize.STRING,
       },
       issueDate: {
         type: Sequelize.DATE,
@@ -26,8 +29,8 @@ module.exports = {
         type: Sequelize.DATE,
       },
       status: {
-        type: Sequelize.ENUM("Inprogress", "Overdue", "Returned"),
-        defaultValue: "Inprogress",
+        type: Sequelize.ENUM("Processing", "Borrowed", "Overdue", "Returned"),
+        defaultValue: "Processing",
       },
       createdAt: {
         allowNull: false,

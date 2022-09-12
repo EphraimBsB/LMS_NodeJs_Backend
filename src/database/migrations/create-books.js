@@ -12,31 +12,55 @@ module.exports = {
         type: Sequelize.INTEGER,
         foreignKey: true,
       },
-      ddc: {
-        type: Sequelize.STRING,
-      },
-      acc_num: {
-        type: Sequelize.STRING,
-      },
       title: {
-        type: Sequelize.TEXT,
+        type: Sequelize.STRING,
       },
       author: {
-        type: Sequelize.TEXT,
+        type: Sequelize.STRING,
       },
       description: {
         type: Sequelize.TEXT,
       },
-      copies: {
+      pub_year: {
+        type: Sequelize.STRING(10),
+      },
+      editions: {
+        type: Sequelize.STRING(20),
+      },
+      ddc: {
+        type: Sequelize.STRING(10),
+      },
+      isbn: {
+        type: Sequelize.STRING(20),
+      },
+      acc_num: {
         type: Sequelize.STRING,
       },
-      stock: {
-        type: Sequelize.STRING,
+      categories: {
+        type: Sequelize.STRING(10),
       },
       subjects: {
+        type: Sequelize.STRING(20),
+      },
+      copies: {
+        type: Sequelize.STRING(5),
+      },
+      stock: {
+        type: Sequelize.STRING(5),
+      },
+      source: {
+        type: Sequelize.STRING(20),
+      },
+      from: {
+        type: Sequelize.STRING(100),
+      },
+      type: {
+        type: Sequelize.ENUM("Physical", "E-book"),
+      },
+      ebook: {
         type: Sequelize.STRING,
       },
-      pub_year: {
+      image: {
         type: Sequelize.STRING,
       },
       status: {
@@ -48,8 +72,17 @@ module.exports = {
         ),
         defaultValue: "Available",
       },
-      image: {
-        type: Sequelize.STRING,
+      shelf: {
+        type: Sequelize.STRING(5),
+      },
+      side: {
+        type: Sequelize.STRING(10),
+      },
+      column: {
+        type: Sequelize.TINYINT,
+      },
+      row: {
+        type: Sequelize.TINYINT,
       },
       createdAt: {
         allowNull: false,

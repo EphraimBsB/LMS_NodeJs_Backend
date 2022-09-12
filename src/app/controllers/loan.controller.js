@@ -6,6 +6,9 @@ class LoanController {
 
   checkUser = async (req, res, next) => {
     const { userId } = req.body;
+    if(!userId){
+      next();
+    }else{
     await this.service
       .checkLoan(userId)
       .then(async (response) => {
@@ -13,7 +16,7 @@ class LoanController {
           let user = await this.service.checkUser(userId);
           if (user) {
             return res.status(409).json({
-              message: "Can't borrow two books at once",
+              message: "Soory Can't borrow two books at once",
             });
           }
         }
@@ -25,12 +28,15 @@ class LoanController {
           err: err.message,
         });
       });
+    }
   };
 
   newLoan = async (req, res) => {
-    const { userId, bookId, acc_num } = req.body;
-    this.service
-      .new(userId, bookId, acc_num)
+    const { userId, bookId, bookAccNo, id } = req.body;
+    if(userId && bookId){
+      console.log('USERID',userId);
+      this.service
+      .new(userId, bookId)
       .then((result) => {
         res.status(201).json({
           loan: result,
@@ -42,6 +48,30 @@ class LoanController {
           err: err.message,
         });
       });
+    }else{
+      console.log('Else USERID',userId);
+      this.service
+      .issueBook(id,bookAccNo)
+      .then((result) => {
+        if(result == null){
+          res.status(404).json({ 
+            message: "Access Number Not Available",
+            loan: result,
+          });
+        }else{
+        res.status(201).json({
+          loan: result,
+        });
+      }
+      })
+      .catch((err) => {
+        res.status(500).json({
+          message: "Something went wrong",
+          err: err.message,
+        });
+      });
+    }
+    
   };
 
   findall = (req, res) => {
@@ -88,6 +118,21 @@ class LoanController {
         res.status(500).json({
           message: "Something went wrong",
           err: err.message,
+        });
+      });
+  };
+
+  filter = (req, res) => {
+    let { keyword } = req.query;
+    this.service
+      .filterLoans(keyword)
+      .then((result) => {
+        res.status(200).json({ loans: result });
+      })
+      .catch((error) => {
+        res.status(500).json({
+          message: "Something wrong, can't search",
+          error: error,
         });
       });
   };

@@ -34,7 +34,7 @@ module.exports = {
       role: {
         type: Sequelize.STRING,
         default: "student",
-        enum: ["librarian", "student", "admin"],
+        enum: ["librarian", "student", "lecturer", "guest","admin"],
       },
       createdAt: {
         allowNull: false,

@@ -1,3 +1,4 @@
+import multiparty from "multiparty";
 class BookController {
   constructor(service, workbook) {
     this.service = service;
@@ -36,6 +37,30 @@ class BookController {
           err: err.message,
         });
       });
+  };
+
+  imageUpload = (req, res) => {
+    if (req.file) {
+      let path = "./uploaded_files/book_images" + req.file.filename;
+      this.service
+        .saveImg(path)
+        .then((resust) => {
+          res.status(201).json({
+            message: "Created sucessfully",
+            resust,
+          });
+        })
+        .catch((err) => {
+          res.status(500).json({
+            message: "Something went wrong",
+            err: err,
+          });
+        });
+    } else {
+      res.status(500).json({
+        message: "Can't upload img",
+      });
+    }
   };
 
   findBook = (req, res) => {
@@ -88,6 +113,22 @@ class BookController {
       .catch((error) => {
         res.status(500).json({
           message: "Something wrong, can't search",
+          error: error,
+        });
+      });
+  };
+
+  filter = (req, res) => {
+    let { keyword } = req.query;
+
+    this.service
+      .filterBooks(keyword)
+      .then((result) => {
+        res.status(200).json({ books: result });
+      })
+      .catch((error) => {
+        res.status(500).json({
+          message: "Something wrong, can't Filter Books",
           error: error,
         });
       });
@@ -165,9 +206,11 @@ class BookController {
             author: obj.author,
             description: obj.description,
             ddc: obj.ddc,
+            acc_num: obj.acc_num,
             copies: obj.copies,
             stock: obj.stock,
             subjects: obj.subjects,
+            pub_year: obj.pub_year,
             status: obj.status,
           });
         });
@@ -179,16 +222,20 @@ class BookController {
           { header: "Author", key: "author", width: 35 },
           { header: "Description", key: "description", width: 35 },
           { header: "DDC Number", key: "ddc", width: 35 },
-          { header: "Copies", key: "copies", width: 35 },
-          { header: "ACC Number", key: "acc_number", width: 15 },
+          { header: "ACC Number", key: "acc_num", width: 20 },
+          { header: "Copies", key: "copies", width: 10 },
+          { header: "Stock", key: "stock", width: 10 },
           { header: "subjects", key: "subjects", width: 20 },
+          { header: "pub_year", key: "pub_year", width: 20 },
           { header: "Status", key: "status", width: 20 },
         ];
 
         // Add Array Rows
         worksheet.addRows(books);
 
-        const data = this.workbook.xlsx.writeFile("./excel.data/books.xlsx");
+        const data = this.workbook.xlsx.writeFile(
+          ".uploaded_files/excel.data/books.xlsx"
+        );
         res.status(200).json({
           message: "File Exported Succefully",
         });
