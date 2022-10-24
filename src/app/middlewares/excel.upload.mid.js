@@ -11,7 +11,7 @@ const excelFilter = (req, file, cb) => {
 };
 var storage = diskStorage({
   destination: (req, file, cb) => {
-    cb(null, ".uploaded_files/excel.data/");
+    cb(null, "uploaded_files/excel.data/");
   },
   filename: (req, file, cb) => {
     console.log(file.originalname);

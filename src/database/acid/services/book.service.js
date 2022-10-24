@@ -27,6 +27,7 @@ class BookService {
 
   update = async (editedBook, id) => {
     const upDate = await model.Books.update(editedBook, id);
+    console.log("BOOK ID :",upDate);
     return upDate;
   };
 

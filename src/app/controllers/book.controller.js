@@ -1,4 +1,4 @@
-import multiparty from "multiparty";
+import removeEmptyObject from "./../helpers/remove.empty.object"
 class BookController {
   constructor(service, workbook) {
     this.service = service;
@@ -135,26 +135,18 @@ class BookController {
   };
 
   editbook = (req, res) => {
-    const editBook = {
-      title: req.body.title,
-      author: req.body.author,
-      description: req.body.description,
-      ddc: req.body.ddc,
-      copies: req.body.copies,
-      stock: req.body.copies,
-      subjects: req.body.subjects,
-      status: req.body.status,
-      image: req.body.image,
-    };
+    const editbook = req.body;
+    const book = removeEmptyObject(editbook);
     const { id } = req.params;
+    console.log("DATA BOOK :", book);
     const obj = { where: { id } };
     this.service
-      .update(editBook, obj)
+      .update(book, obj)
       .then((result) => {
         if (result[0] === 1) {
           res.status(200).json({
             message: "Book updated succefully",
-            editBook: editBook,
+            editBook: book,
           });
         } else {
           res.status(404).json({
@@ -193,6 +185,7 @@ class BookController {
         });
       });
   };
+  
 
   exportExcel = (req, res) => {
     this.service
@@ -230,12 +223,9 @@ class BookController {
           { header: "Status", key: "status", width: 20 },
         ];
 
-        // Add Array Rows
         worksheet.addRows(books);
 
-        const data = this.workbook.xlsx.writeFile(
-          ".uploaded_files/excel.data/books.xlsx"
-        );
+        const data = this.workbook.xlsx.writeFile(".uploaded_files/excel.data/books.xlsx");
         res.status(200).json({
           message: "File Exported Succefully",
         });

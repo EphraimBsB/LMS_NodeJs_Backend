@@ -1,28 +1,57 @@
 import model from "./../../models";
 const readXlsxFile = require("read-excel-file/node");
+var isbn = require('node-isbn');
 
 const upload = async (req, res) => {
   try {
     if (req.file == undefined) {
       return res.status(400).send("Please upload an excel file!");
     }
-    let path = ".uploaded_files/excel.data/" + req.file.filename;
+    console.log("FILE",req.file)
+    let path = "uploaded_files/excel.data/" + req.file.filename;
     readXlsxFile(path).then((rows) => {
       rows.shift();
       let Books = [];
       rows.forEach((row) => {
-        let book = {
-          title: row[0],
-          author: row[1],
-          description: row[2],
-          ddc: row[3],
-          acc_number: row[4],
-          copies: row[5],
-          stock: row[6],
-          subjects: row[7],
-          pub_year: row[8],
+        
+        if(row[7] !== null && row[7]){
+        let isb = row[7].toString().replace('978-','');
+        // console.log('ISBN ROW : ', isb);
+        isbn.resolve(isb, function (err, book) {
+          if (err) {
+              // console.log('Book not found', err);
+              // console.log('NOT FOUND:', isb);
+          } else {
+          let bookItem = {
+            title: book.title,
+            author: book.authors,
+            description: book.description,
+            editions: book.editions,
+            ddc: book.ddc,
+            acc_num: book.acc_num,
+            isbn: book.isbn,
+            copies: book.copies,
+            stock: book.copies,
+            categories: book.categories,
+            subjects: book.subjects,
+            pub_year: book.pub_year,
+            source: book.source,
+            from: book.from,
+            type: book.type,
+            image: imageFilePath,
+            ebook: ebookpath,
+            status: book.status,
+            shelf: book.shelf,
+            side: book.side,
+            column: book.column,
+            row: book.row,
         };
-        Books.push(book);
+        Books.push(bookItem);
+              console.log('Book found: ', book);
+              console.log('FOUND :', isb);
+          }
+        });
+      }
       });
       model.Books.bulkCreate(Books)
         .then(() => {

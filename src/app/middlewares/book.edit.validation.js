@@ -13,7 +13,7 @@ const bookValidation = (req, res, next) => {
     imageFilePath = req.body.image;
   }
 
-  const book = {
+  const editbook = {
     title: req.body.title,
     author: req.body.author,
     description: req.body.description,
@@ -39,23 +39,23 @@ const bookValidation = (req, res, next) => {
     row: req.body.row,
   };
   const schema = Joi.object().keys({
-    title: Joi.string().required().max(255),
-    author: Joi.string().required().max(255),
-    description: Joi.string().required(),
+    title: Joi.string().max(255),
+    author: Joi.string().max(255),
+    description: Joi.string(),
     editions: Joi.string(),
-    ddc: Joi.string().required().min(3).required().min(3),
-    acc_num: Joi.string().required(),
-    isbn: Joi.string().required(),
-    copies: Joi.number().required(),
-    stock: Joi.number().required(),
-    categories: Joi.string().required(),
-    subjects: Joi.string().required(),
-    publisher: Joi.string().required(),
-    pub_year: Joi.string().required(),
-    source: Joi.string().required(),
-    from: Joi.string().required(),
-    type: Joi.string().required(),
-    image: Joi.string().required(),
+    ddc: Joi.string().min(3).min(3),
+    acc_num: Joi.string(),
+    isbn: Joi.string(),
+    copies: Joi.number(),
+    stock: Joi.number(),
+    categories: Joi.string(),
+    subjects: Joi.string(),
+    publisher: Joi.string(),
+    pub_year: Joi.string(),
+    source: Joi.string(),
+    from: Joi.string(),
+    type: Joi.string(),
+    image: Joi.string(),
     ebook: Joi.string(),
     status: Joi.string().valid(
       "Available",
@@ -63,19 +63,19 @@ const bookValidation = (req, res, next) => {
       "Reserved",
       "Borrowed"
     ),
-    shelf: Joi.string().required(),
-    side: Joi.string().required(),
-    column: Joi.number().integer().required(),
-    row: Joi.number().integer().required(),
+    shelf: Joi.string(),
+    side: Joi.string(),
+    column: Joi.number().integer(),
+    row: Joi.number().integer(),
   });
-  const { error } = schema.validate(book);
+  const { error } = schema.validate(editbook);
   if (error) {
     return res.status(400).json({
-      message: "validation has faild",
+      message: "validation has failed",
       error: error.message,
     });
   }
-  req.book = book;
+  req.book = editbook;
   return next();
 };
 
