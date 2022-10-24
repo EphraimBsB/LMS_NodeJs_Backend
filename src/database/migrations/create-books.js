@@ -21,6 +21,9 @@ module.exports = {
       description: {
         type: Sequelize.TEXT,
       },
+      publisher: {
+        type: Sequelize.STRING(50),
+      },
       pub_year: {
         type: Sequelize.STRING(10),
       },
@@ -28,7 +31,7 @@ module.exports = {
         type: Sequelize.STRING(20),
       },
       ddc: {
-        type: Sequelize.STRING(10),
+        type: Sequelize.STRING(20),
       },
       isbn: {
         type: Sequelize.STRING(20),
@@ -55,7 +58,7 @@ module.exports = {
         type: Sequelize.STRING(100),
       },
       type: {
-        type: Sequelize.ENUM("Physical", "E-book"),
+        type: Sequelize.ENUM("Physical", "E-book","Physical&E-book"),
       },
       ebook: {
         type: Sequelize.STRING,
