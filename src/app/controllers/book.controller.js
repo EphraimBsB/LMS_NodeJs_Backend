@@ -86,9 +86,10 @@ class BookController {
       });
   };
 
-  findAll = (_, res) => {
+  findAll = (req, res) => {
+    const {page, size} = req.query;
     this.service
-      .findAllBooks()
+      .findAllBooks(page, size)
       .then((result) => {
         res.status(200).json({
           books: result,
@@ -138,7 +139,6 @@ class BookController {
     const editbook = req.body;
     const book = removeEmptyObject(editbook);
     const { id } = req.params;
-    console.log("DATA BOOK :", book);
     const obj = { where: { id } };
     this.service
       .update(book, obj)

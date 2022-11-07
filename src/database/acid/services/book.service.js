@@ -27,7 +27,6 @@ class BookService {
 
   update = async (editedBook, id) => {
     const upDate = await model.Books.update(editedBook, id);
-    console.log("BOOK ID :",upDate);
     return upDate;
   };
 
@@ -36,21 +35,25 @@ class BookService {
     return destroy;
   };
 
-  findAllBooks = async () => {
-    const BooksFindAll = await model.Books.findAll({
-      where: {},
-      order: [["id", "DESC"]],
-    });
-    BooksFindAll.forEach(async (element) => {
-      if (element.stock == 0) {
-        element.update({ status: "Borrowed" });
+  findAllBooks = async (page, size) => {
+    const BooksFindAll = await model.Books.findAndCountAll(
+      {
+        limit: +size || 100,
+        offset: +page * +size || 0,
+        where: {},
+        order: [["id", "DESC"]],
       }
-    });
+    );
+    // BooksFindAll.forEach(async (element) => {
+    //   if (element.stock == 0) {
+    //     await model.Books.update({ status: "Borrowed" });
+    //   }
+    // });
     return BooksFindAll
   };
 
   searchBook = async (keyword) => {
-    const BooksFindAll = await model.Books.findAll({
+    const BooksFindAll = await model.Books.findAndCountAll({
       where: {
         [Op.or]: [
           {

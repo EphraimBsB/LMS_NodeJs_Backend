@@ -14,7 +14,6 @@ var storage = diskStorage({
     cb(null, "uploaded_files/excel.data/");
   },
   filename: (req, file, cb) => {
-    console.log(file.originalname);
     cb(null, `${Date.now()}-uploaded-${file.originalname}`);
   },
 });

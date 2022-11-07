@@ -1,62 +1,46 @@
 import model from "./../../models";
 const readXlsxFile = require("read-excel-file/node");
-var isbn = require('node-isbn');
-
+import { Op } from "sequelize";
 const upload = async (req, res) => {
   try {
     if (req.file == undefined) {
       return res.status(400).send("Please upload an excel file!");
     }
-    console.log("FILE",req.file)
     let path = "uploaded_files/excel.data/" + req.file.filename;
     readXlsxFile(path).then((rows) => {
       rows.shift();
       let Books = [];
       rows.forEach((row) => {
-        
-        if(row[7] !== null && row[7]){
-        let isb = row[7].toString().replace('978-','');
-        // console.log('ISBN ROW : ', isb);
-        isbn.resolve(isb, function (err, book) {
-          if (err) {
-              // console.log('Book not found', err);
-              // console.log('NOT FOUND:', isb);
-          } else {
-          let bookItem = {
-            title: book.title,
-            author: book.authors,
-            description: book.description,
-            editions: book.editions,
-            ddc: book.ddc,
-            acc_num: book.acc_num,
-            isbn: book.isbn,
-            copies: book.copies,
-            stock: book.copies,
-            categories: book.categories,
-            subjects: book.subjects,
-            pub_year: book.pub_year,
-            source: book.source,
-            from: book.from,
-            type: book.type,
-            image: imageFilePath,
-            ebook: ebookpath,
-            status: book.status,
-            shelf: book.shelf,
-            side: book.side,
-            column: book.column,
-            row: book.row,
+            let bookItem = {
+            title: row[3],
+            author: row[2],
+            description: 'NO DESCRIPTION AVAILABLE',
+            editions: 'None',
+            ddc: row[5].trim(),
+            acc_num: '0000,0000,0000',
+            isbn: row[7],
+            copies: row[8],
+            stock: row[8],
+            categories: 'Book',
+            subjects: row[6],
+            publisher: 'No Publisher',
+            pub_year: row[1],
+            source: 'Purchased',
+            from: 'ISBAT University',
+            type: 'Physical',
+            image: 'http://localhost:5000/uploaded_files/book_images/No-image.jpg',
+            shelf: '0',
+            side: 'None',
+            column: 0,
+            row: 0,
         };
         Books.push(bookItem);
-              console.log('Book found: ', book);
-              console.log('FOUND :', isb);
-          }
         });
-      }
-      });
       model.Books.bulkCreate(Books)
-        .then(() => {
+        .then((book) => {
           res.status(200).send({
             message: "Uploaded the file successfully: " + req.file.originalname,
+            books: book
           });
         })
         .catch((error) => {
@@ -72,5 +56,14 @@ const upload = async (req, res) => {
     });
   }
 };
+
+const findBook = async(title, ddc) => {
+  const findBook = await model.Books.findOne({
+    where: {
+      [Op.or]: [{ title: title }, { ddc: ddc },],
+    },
+  });
+  return findBook;
+}
 
 export default upload;
