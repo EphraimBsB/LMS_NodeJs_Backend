@@ -25,13 +25,13 @@ module.exports = {
         type: Sequelize.STRING(50),
       },
       pub_year: {
-        type: Sequelize.STRING(10),
+        type: Sequelize.STRING(20),
       },
       editions: {
         type: Sequelize.STRING(20),
       },
       ddc: {
-        type: Sequelize.STRING(20),
+        type: Sequelize.STRING(100),
       },
       isbn: {
         type: Sequelize.STRING(20),
@@ -43,7 +43,7 @@ module.exports = {
         type: Sequelize.STRING(10),
       },
       subjects: {
-        type: Sequelize.STRING(20),
+        type: Sequelize.STRING(50),
       },
       copies: {
         type: Sequelize.STRING(5),
@@ -59,6 +59,7 @@ module.exports = {
       },
       type: {
         type: Sequelize.ENUM("Physical", "E-book","Physical&E-book"),
+        defaultValue: "Physical",
       },
       ebook: {
         type: Sequelize.STRING,

@@ -34,7 +34,6 @@ class LoanController {
   newLoan = async (req, res) => {
     const { userId, bookId, bookAccNo, id } = req.body;
     if(userId && bookId){
-      console.log('USERID',userId);
       this.service
       .new(userId, bookId)
       .then((result) => {
@@ -49,7 +48,6 @@ class LoanController {
         });
       });
     }else{
-      console.log('Else USERID',userId);
       this.service
       .issueBook(id,bookAccNo)
       .then((result) => {

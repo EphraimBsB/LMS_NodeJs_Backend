@@ -259,7 +259,6 @@ class LoanService {
     return userLoan;
   };
   filterLoans = async (keyword) => {
-    console.log('Keyword is:',keyword);
     const loansFindAll = await model.Loans.findAll({
       where: {
         [Op.or]: [
