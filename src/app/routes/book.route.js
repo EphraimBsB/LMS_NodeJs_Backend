@@ -29,6 +29,7 @@ router.get("/books", bookController.findAll);
 router.get("/search", bookController.search);
 router.get("/oclc/:oclc", oclcFunc);
 router.get("/filter", bookController.filter);
+router.get("/analysis", bookController.booksAnalitics);
 router.patch(
   "/book_edit/:id",
   checkAuth,

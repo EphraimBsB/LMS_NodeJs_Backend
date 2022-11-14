@@ -44,11 +44,6 @@ class BookService {
         order: [["id", "DESC"]],
       }
     );
-    // BooksFindAll.forEach(async (element) => {
-    //   if (element.stock == 0) {
-    //     await model.Books.update({ status: "Borrowed" });
-    //   }
-    // });
     return BooksFindAll
   };
 
@@ -143,6 +138,35 @@ class BookService {
       order: [["id", "DESC"]],
     });
     return BooksFindAll;
+  };
+
+  analitics = async () => {
+    let total = 0;
+    let physical = [];
+    let ebook = [];
+    let available = 0;
+    let analycis = {};
+    const allCollection = await model.Books.findAll();
+    allCollection.map(book => {
+      total += parseInt(book.copies);
+      available += parseInt(book.stock);
+      if(book.type.includes('Physical')){
+        physical.push(book);
+      }else if(book.type.includes('E-book')){
+        ebook.push(book);
+      }
+    });
+    
+    const phy = physical.length;
+    const eb = ebook.length;
+    analycis={
+      total,
+      available,
+      phy,
+      eb
+    }
+    
+    return analycis
   };
 }
 export default BookService;

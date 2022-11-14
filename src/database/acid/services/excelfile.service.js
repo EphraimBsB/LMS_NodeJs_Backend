@@ -8,15 +8,15 @@ const upload = async (req, res) => {
     }
     let path = "uploaded_files/excel.data/" + req.file.filename;
     readXlsxFile(path).then((rows) => {
-      rows.shift();
+      let slicedRows = rows.slice(2);
       let Books = [];
-      rows.forEach((row) => {
+      slicedRows.forEach((row) => {
             let bookItem = {
             title: row[3],
             author: row[2],
             description: 'NO DESCRIPTION AVAILABLE',
-            editions: 'None',
-            ddc: row[5].trim(),
+            editions: 'No Edition',
+            ddc: row[5],
             acc_num: '0000,0000,0000',
             isbn: row[7],
             copies: row[8],
