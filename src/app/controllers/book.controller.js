@@ -237,5 +237,20 @@ class BookController {
         });
       });
   };
+
+  booksAnalitics = (req, res) => {
+    this.service
+      .analitics()
+      .then((result) => {
+        console.log(result);
+        res.status(200).json({ analysis: result });
+      })
+      .catch((error) => {
+        res.status(500).json({
+          message: "Something wrong, can't ANALYSE Books",
+          error: error,
+        });
+      });
+  };
 }
 export default BookController;
