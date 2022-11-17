@@ -11,28 +11,29 @@ const upload = async (req, res) => {
       let slicedRows = rows.slice(2);
       let Books = [];
       slicedRows.forEach((row) => {
-            let bookItem = {
-            title: row[3],
-            author: row[2],
-            description: 'NO DESCRIPTION AVAILABLE',
-            editions: 'No Edition',
-            ddc: row[5],
-            acc_num: '0000,0000,0000',
-            isbn: row[7],
-            copies: row[8],
-            stock: row[8],
-            categories: 'Book',
-            subjects: row[6],
-            publisher: 'No Publisher',
-            pub_year: row[1],
-            source: 'Purchased',
-            from: 'ISBAT University',
-            type: 'Physical',
-            image: 'http://localhost:5000/uploaded_files/book_images/No-image.jpg',
-            shelf: '0',
-            side: 'None',
-            column: 0,
-            row: 0,
+          let bookItem = {
+          title: row[3],
+          author: row[2],
+          description: 'NO DESCRIPTION AVAILABLE',
+          editions: 'No Edition',
+          ddc: row[5],
+          acc_num: '0000,0000,0000',
+          isbn: row[7],
+          copies: row[8],
+          stock: row[8],
+          categories: 'Book',
+          subjects: row[6],
+          publisher: 'No Publisher',
+          pub_year: row[1],
+          source: 'Purchased',
+          from: 'ISBAT University',
+          type: 'Physical',
+          image: 'http://localhost:5000/uploaded_files/book_images/No-image.jpg',
+          location: 'ISBAT Main Campus',
+          shelf: '0',
+          side: 'None',
+          column: 0,
+          row: 0,
         };
         Books.push(bookItem);
         });
@@ -40,7 +41,7 @@ const upload = async (req, res) => {
         .then((book) => {
           res.status(200).send({
             message: "Uploaded the file successfully: " + req.file.originalname,
-            books: book
+            book: book
           });
         })
         .catch((error) => {

@@ -28,6 +28,8 @@ export const comparePass = (req, res, data) => {
       jwt.sign(
         {
           id: data.id,
+          name: data.name,
+          last_name: data.last_name,
           roll_number: data.roll_number,
           role: data.role,
         },
