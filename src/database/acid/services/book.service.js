@@ -140,6 +140,7 @@ class BookService {
     return BooksFindAll;
   };
 
+
   analitics = async () => {
     let total = 0;
     let physical = [];
@@ -167,6 +168,11 @@ class BookService {
     }
     
     return analycis
+  };
+
+  exportAlltoExcel = async () => {
+    const exportFindAll = await model.Books.findAll();
+    return exportFindAll
   };
 }
 export default BookService;
