@@ -76,6 +76,9 @@ module.exports = {
         ),
         defaultValue: "Available",
       },
+      location: {
+        type: Sequelize.STRING(20),
+      },
       shelf: {
         type: Sequelize.STRING(5),
       },

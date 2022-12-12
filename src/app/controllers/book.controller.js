@@ -187,10 +187,11 @@ class BookController {
   };
   
 
-  exportExcel = (req, res) => {
+  exportExcel = (req, res) =>{
+    let { name } = req.query;
     this.service
-      .findAllBooks()
-      .then((objs) => {
+      .exportAlltoExcel()
+      .then(async(objs) => {
         let books = [];
         objs.forEach((obj) => {
           books.push({
@@ -198,13 +199,18 @@ class BookController {
             title: obj.title,
             author: obj.author,
             description: obj.description,
+            publisher:obj.publisher,
+            pub_year:obj.pub_year,
+            isbn:obj.isbn,
             ddc: obj.ddc,
             acc_num: obj.acc_num,
+            categories:obj.categories,
+            type:obj.type,
             copies: obj.copies,
             stock: obj.stock,
             subjects: obj.subjects,
-            pub_year: obj.pub_year,
             status: obj.status,
+            image: obj.image,
           });
         });
         this.workbook.removeWorksheet();
@@ -214,20 +220,26 @@ class BookController {
           { header: "Title", key: "title", width: 35 },
           { header: "Author", key: "author", width: 35 },
           { header: "Description", key: "description", width: 35 },
+          { header: "Publisher", key: "publisher", width: 20 },
+          { header: "Pub Year", key: "pub_year", width: 20 },
+          { header: "ISBN Number", key: "isbn", width: 20 },
           { header: "DDC Number", key: "ddc", width: 35 },
           { header: "ACC Number", key: "acc_num", width: 20 },
+          { header: "Category", key: "categories", width: 20 },
+          { header: "Book Type", key: "type", width: 20 },
+          { header: "subjects", key: "subjects", width: 20 },
           { header: "Copies", key: "copies", width: 10 },
           { header: "Stock", key: "stock", width: 10 },
-          { header: "subjects", key: "subjects", width: 20 },
-          { header: "pub_year", key: "pub_year", width: 20 },
           { header: "Status", key: "status", width: 20 },
+          { header: "Image", key: "image", width: 35 },
         ];
 
         worksheet.addRows(books);
 
-        const data = this.workbook.xlsx.writeFile(".uploaded_files/excel.data/books.xlsx");
+        const data = await this.workbook.xlsx.writeFile(`uploaded_files/excel.data/${name}`);
         res.status(200).json({
-          message: "File Exported Succefully",
+          message: "File Exported Successfully",
+          file: data
         });
       })
       .catch((err) => {
@@ -237,6 +249,8 @@ class BookController {
         });
       });
   };
+
+  
 
   booksAnalitics = (req, res) => {
     this.service

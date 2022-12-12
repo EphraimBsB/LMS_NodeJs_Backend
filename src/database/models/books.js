@@ -51,6 +51,7 @@ module.exports = (sequelize, DataTypes) => {
         "Reserved",
         "Borrowed"
       ),
+      location: DataTypes.STRING(20),
       shelf: DataTypes.STRING(5),
       side: DataTypes.STRING(10),
       column: DataTypes.TINYINT,

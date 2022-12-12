@@ -7,17 +7,10 @@ class LoanService {
     let dueDate;
     const returnDate = null;
     let status = "Processing";
-    const user = await model.User.findOne({ where: { roll_number: userId } });
-    if (user.degree === "undergraduate") {
-      dueDate = new Date(issueDate.getTime() + 7 * 24 * 60 * 60 * 1000);
-    } else if (user.degree === "postgraduate") {
-      dueDate = new Date(issueDate.getTime() + 14 * 24 * 60 * 60 * 1000);
-    } else if (user.degree === "lecturer") {
-      dueDate = new Date(issueDate.getTime() + 120 * 24 * 60 * 60 * 1000);
-    }
-
+    // const user = await model.User.findOne({ where: { roll_number: userId } });
+    dueDate = new Date(issueDate.getTime() + 14 * 24 * 60 * 60 * 1000);
     const book = await model.Books.findOne({ where: { id: bookId } });
-    if (book.stock > 0 && book.status != 'Borrowed') {
+    if (book.stock >= 0 && book.status != 'Borrowed') {
       const newloan = await model.Loans.create({
         userId,
         bookId,
@@ -27,31 +20,31 @@ class LoanService {
         status,
       });
       return newloan;
-
-    }else if (book.stock == 0) {
-      book.update({ status: "Borrowed" });
+    }else{
+      return null;
     }
   };
 
   issueBook = async(id, bookAccNo) => {
-    let status = 'Borrowed'
+    let status = 'Borrowed';
     const loan = await model.Loans.findOne({ where: { id: id } });
     const bookId = loan.bookId;
     const book = await model.Books.findOne({ where: { id: bookId } });
     let accNum = await book.acc_num.split(",");
-    if(accNum.includes(bookAccNo)){
+    if(accNum.includes(bookAccNo) && accNum.length!==0){
     loan.update({bookAccNo: bookAccNo, status: status});
-    let newStock = book.stock - 1;
-    let index = accNum.indexOf(bookAccNo);
-    if (index > -1) {
-      accNum.splice(index, 1);
-      let newAccNum = accNum.toString();
-      book.update({ stock: newStock, acc_num: newAccNum });
-    }
-    if (book.stock == 0) {
+      if(book.stock >= 0 && book.status != 'Borrowed'){
+        let newStock = parseInt(book.stock) - 1;
+        let index = accNum.indexOf(bookAccNo);
+        accNum.splice(index,1);
+        let newAccNum = accNum.toString();
+        book.update({ stock: newStock, acc_num: newAccNum });
+      }
+
+    if(book.stock == 0){
       book.update({ status: "Borrowed" });
     }
-      return loan;
+    return loan;
   }else{
     return null;
   }
