@@ -4,11 +4,11 @@ const bookValidation = (req, res, next) => {
   let imageFilePath;
   let ebookpath;
   if (req.files.ebook != undefined) {
-    ebookpath = "./uploaded_files/e-books/" + req.files.ebook[0].filename;
+    ebookpath = "/uploaded_files/e-books/" + req.files.ebook[0].filename;
   }
   if (req.files.image != undefined) {
     imageFilePath =
-      "./uploaded_files/book_images/" + req.files.image[0].filename;
+      "/uploaded_files/book_images/" + req.files.image[0].filename;
   } else {
     imageFilePath = req.body.image;
   }
@@ -33,10 +33,8 @@ const bookValidation = (req, res, next) => {
     image: imageFilePath,
     ebook: ebookpath,
     status: req.body.status,
+    location: req.body.location,
     shelf: req.body.shelf,
-    side: req.body.side,
-    column: req.body.column,
-    row: req.body.row,
   };
   const schema = Joi.object().keys({
     title: Joi.string().required().max(255),
@@ -63,10 +61,8 @@ const bookValidation = (req, res, next) => {
       "Reserved",
       "Borrowed"
     ),
+    location: Joi.string().required(),
     shelf: Joi.string().required(),
-    side: Joi.string().required(),
-    column: Joi.number().integer().required(),
-    row: Joi.number().integer().required(),
   });
   const { error } = schema.validate(book);
   if (error) {

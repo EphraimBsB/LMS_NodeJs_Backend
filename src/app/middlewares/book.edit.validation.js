@@ -1,14 +1,15 @@
 import Joi from "joi";
 
-const bookValidation = (req, res, next) => {
+const bookEditValidation = (req, res, next) => {
   let imageFilePath;
   let ebookpath;
+  
   if (req.files.ebook != undefined) {
-    ebookpath = "./uploaded_files/e-books/" + req.files.ebook[0].filename;
+    ebookpath = "/uploaded_files/e-books/" + req.files.ebook[0].filename;
   }
   if (req.files.image != undefined) {
     imageFilePath =
-      "./uploaded_files/book_images/" + req.files.image[0].filename;
+      "/uploaded_files/book_images/" + req.files.image[0].filename;
   } else {
     imageFilePath = req.body.image;
   }
@@ -32,51 +33,46 @@ const bookValidation = (req, res, next) => {
     type: req.body.type,
     image: imageFilePath,
     ebook: ebookpath,
-    status: req.body.status,
+    location: req.body.location,
     shelf: req.body.shelf,
-    side: req.body.side,
-    column: req.body.column,
-    row: req.body.row,
   };
-  const schema = Joi.object().keys({
-    title: Joi.string().max(255),
-    author: Joi.string().max(255),
-    description: Joi.string(),
-    editions: Joi.string(),
-    ddc: Joi.string().min(3).min(3),
-    acc_num: Joi.string(),
-    isbn: Joi.string(),
-    copies: Joi.number(),
-    stock: Joi.number(),
-    categories: Joi.string(),
-    subjects: Joi.string(),
-    publisher: Joi.string(),
-    pub_year: Joi.string(),
-    source: Joi.string(),
-    from: Joi.string(),
-    type: Joi.string(),
-    image: Joi.string(),
-    ebook: Joi.string(),
-    status: Joi.string().valid(
-      "Available",
-      "Unavailable",
-      "Reserved",
-      "Borrowed"
-    ),
-    shelf: Joi.string(),
-    side: Joi.string(),
-    column: Joi.number().integer(),
-    row: Joi.number().integer(),
-  });
-  const { error } = schema.validate(editbook);
-  if (error) {
-    return res.status(400).json({
-      message: "validation has failed",
-      error: error.message,
-    });
-  }
-  req.book = editbook;
+  
+  // const schema = Joi.object().keys({
+  //   title: Joi.string().max(255),
+  //   author: Joi.string().max(255),
+  //   description: Joi.string(),
+  //   editions: Joi.string(),
+  //   ddc: Joi.string().min(3).min(3),
+  //   acc_num: Joi.string(),
+  //   isbn: Joi.string(),
+  //   copies: Joi.number(),
+  //   stock: Joi.number(),
+  //   categories: Joi.string(),
+  //   subjects: Joi.string(),
+  //   publisher: Joi.string(),
+  //   pub_year: Joi.string(),
+  //   source: Joi.string(),
+  //   from: Joi.string(),
+  //   type: Joi.string(),
+  //   image: Joi.string(),
+  //   ebook: Joi.string(),
+  //   shelf: Joi.string(),
+  //   side: Joi.string(),
+  //   column: Joi.number().integer(),
+  //   row: Joi.number().integer(),
+  // });
+  // const { error } = schema.validate(editbook);
+  // // console.log('Book REQUEST FILES: ',editbook);
+  // if (error) {
+  //   console.log('Book REQUEST FILES: ',error);
+  //   return res.status(400).json({
+  //     message: "validation has failed",
+  //     error: error.message,
+  //   });
+  // }
+  // console.log('Book REQUEST FILES: ',editbook);
+  req.editbook = editbook;
   return next();
 };
 
-export default bookValidation;
+export default bookEditValidation;

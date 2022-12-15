@@ -136,7 +136,7 @@ class BookController {
   };
 
   editbook = (req, res) => {
-    const editbook = req.body;
+    const {editbook} = req;
     const book = removeEmptyObject(editbook);
     const { id } = req.params;
     const obj = { where: { id } };

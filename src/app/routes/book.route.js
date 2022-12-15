@@ -6,6 +6,7 @@ import upload from "../../database/acid/services/excelfile.service";
 import uploadFile from "../middlewares/excel.upload.mid";
 import uploadImage from "../middlewares/book.image.upd";
 import oclcFunc from "../helpers/oclc.api";
+import bookEditValidation from "../middlewares/book.edit.validation";
 
 const router = express.Router();
 router.post(
@@ -30,7 +31,7 @@ router.get("/search", bookController.search);
 router.get("/oclc/:oclc", oclcFunc);
 router.get("/filter", bookController.filter);
 router.get("/analysis", bookController.booksAnalitics);
-router.patch(
+router.post(
   "/book_edit/:id",
   checkAuth,
   checkRole(["librarian", "admin"]),
@@ -38,6 +39,7 @@ router.patch(
     { name: "image", maxCount: 1 },
     { name: "ebook", maxCount: 1 },
   ]),
+  bookEditValidation,
   bookController.editbook
 );
 router.delete(
