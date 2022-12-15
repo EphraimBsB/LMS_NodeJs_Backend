@@ -15,7 +15,7 @@ const upload = async (req, res) => {
         return await isbn.resolve(row[7]).then((book) => ( {
           title: row[3],
           author: row[2],
-          description:book.description??'NO DESCRIPTION AVAILABLE',
+          description:`${book.description}`??'NO DESCRIPTION AVAILABLE',
           editions: 'No Edition',
           ddc: row[5],
           acc_num: '0000,0000,0000',
@@ -29,12 +29,10 @@ const upload = async (req, res) => {
           source: 'Purchased',
           from: 'ISBAT University',
           type: 'Physical',
-          image: book.imageLinks.thumbnail??'http://localhost:5000/uploaded_files/book_images/No-image.jpg',
+          image: book.imageLinks.thumbnail??'/uploaded_files/book_images/No-image.jpg',
           location: 'ISBAT Main Campus',
-          shelf: '0',
-          side: 'None',
-          column: 0,
-          row: 0,
+          shelf: 'Open Shelf',
+          location: 'Main Campus',
         })).catch(err => ({
             title: row[3],
             author: row[2],
@@ -52,12 +50,10 @@ const upload = async (req, res) => {
             source: 'Purchased',
             from: 'ISBAT University',
             type: 'Physical',
-            image: 'http://localhost:5000/uploaded_files/book_images/No-image.jpg',
+            image: '/uploaded_files/book_images/No-image.jpg',
             location: 'ISBAT Main Campus',
-            shelf: '0',
-            side: 'None',
-            column: 0,
-            row: 0,
+            shelf: 'Open Shelf',
+            location: 'Main Campus',
         }));
       }));
       model.Books.bulkCreate(books)

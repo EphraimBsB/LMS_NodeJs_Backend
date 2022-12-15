@@ -80,16 +80,7 @@ module.exports = {
         type: Sequelize.STRING(20),
       },
       shelf: {
-        type: Sequelize.STRING(5),
-      },
-      side: {
-        type: Sequelize.STRING(10),
-      },
-      column: {
-        type: Sequelize.TINYINT,
-      },
-      row: {
-        type: Sequelize.TINYINT,
+        type: Sequelize.STRING(20),
       },
       createdAt: {
         allowNull: false,
