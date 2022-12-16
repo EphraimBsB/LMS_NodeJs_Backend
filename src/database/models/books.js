@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
       stock: DataTypes.STRING(6),
       image: DataTypes.STRING,
       subjects: DataTypes.STRING(20),
-      publisher: DataTypes.STRING(50),
+      publisher: DataTypes.STRING(150),
       pub_year: DataTypes.STRING(10),
       ebook: DataTypes.STRING,
       editions: DataTypes.STRING(20),

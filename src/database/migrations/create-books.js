@@ -22,7 +22,7 @@ module.exports = {
         type: Sequelize.TEXT,
       },
       publisher: {
-        type: Sequelize.STRING(50),
+        type: Sequelize.STRING(150),
       },
       pub_year: {
         type: Sequelize.STRING(20),
