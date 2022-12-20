@@ -79,7 +79,7 @@ class BookService {
   };
 
   filterBooks = async (keyword) => {
-    const BooksFindAll = await model.Books.findAll({
+    const findAllBooks = await model.Books.findAndCountAll({
       where: {
         [Op.or]: [
           {
@@ -137,7 +137,7 @@ class BookService {
       },
       order: [["id", "DESC"]],
     });
-    return BooksFindAll;
+    return findAllBooks;
   };
 
 
