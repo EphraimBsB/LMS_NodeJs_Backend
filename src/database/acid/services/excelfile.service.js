@@ -15,7 +15,7 @@ const upload = async (req, res) => {
         return await isbn.resolve(row[5]).then((book) => ( {
           title: row[3]??'NO TITLE',
           author: row[2]??'NO AUTHOR',
-          description:book.description??'NO DESCRIPTION AVAILABLE',
+          description:book.description.toString()??'NO DESCRIPTION AVAILABLE',
           editions: 'No Edition',
           ddc: row[6]??'NO DDC No',
           acc_num: '0000,0000,0000',
