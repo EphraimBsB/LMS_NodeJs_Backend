@@ -11,11 +11,16 @@ const upload = async (req, res) => {
 
     readXlsxFile(path).then(async (rows) => {
       let slicedRows = rows.slice(2);
+
       const books = await Promise.all(slicedRows.map(async row => {
+        const book = await model.Books.findOne({where: { ddc:row[6] },});
+        if(book){
+          return null;
+        }else{
         return await isbn.resolve(row[5]).then((book) => ( {
           title: row[3]??'NO TITLE',
           author: row[2]??'NO AUTHOR',
-          description:book.description.toString()??'NO DESCRIPTION AVAILABLE',
+          description:`${book.description.toString()}`??'NO DESCRIPTION AVAILABLE',
           editions: 'No Edition',
           ddc: row[6]??'NO DDC No',
           acc_num: '0000,0000,0000',
@@ -55,7 +60,13 @@ const upload = async (req, res) => {
           shelf: 'Open Shelf',
           location: 'Main Campus',
         }));
+      }
       }));
+      if(books.includes(null)){
+        return res.status(400).send({
+          message: "File already exists ",
+        });
+      }else{
       model.Books.bulkCreate(books)
         .then((book) => {
           res.status(200).send({
@@ -69,6 +80,7 @@ const upload = async (req, res) => {
             error: error.message,
           });
         });
+      }
     });
   } catch (error) {
     res.status(500).send({
@@ -76,14 +88,5 @@ const upload = async (req, res) => {
     });
   }
 };
-
-const findBook = async(title, ddc) => {
-  const findBook = await model.Books.findOne({
-    where: {
-      [Op.or]: [{ title: title }, { ddc: ddc },],
-    },
-  });
-  return findBook;
-}
 
 export default upload;
