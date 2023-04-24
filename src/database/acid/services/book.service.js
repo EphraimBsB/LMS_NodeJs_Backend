@@ -21,8 +21,7 @@ class BookService {
   };
 
   find = async (id) => {
-    const findBook = await model.Books.findOne({where: { id: id },});
-    console.log('book', findBook);
+    const findBook = await model.Books.findOne({where: { id },});
     return findBook;
   };
 

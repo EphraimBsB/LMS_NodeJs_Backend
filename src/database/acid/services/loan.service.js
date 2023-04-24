@@ -50,6 +50,44 @@ class LoanService {
   }
   }
 
+  create = async (bookId, userId, bookAccNo) => {
+    let issueDate = new Date();
+    let dueDate;
+    const returnDate = null;
+    let status = "Borrowed";
+    dueDate = new Date(issueDate.getTime() + 14 * 24 * 60 * 60 * 1000);
+    const user = await model.User.findOne({ where: { roll_number: userId } });
+    if(!user){
+      return null;
+    }
+    const book = await model.Books.findOne({ where: { id: bookId } });
+    if(book.stock == 0){
+      book.update({ status: "Borrowed" });
+    }
+    let accNum = await book.acc_num.split(",");
+    if(accNum.includes(bookAccNo) && accNum.length!== 0 && book.stock >= 0 && book.status != 'Borrowed'){
+        let newStock = parseInt(book.stock) - 1;
+        let index = accNum.indexOf(bookAccNo);
+        accNum.splice(index,1);
+        let newAccNum = accNum.toString();
+        book.update({ stock: newStock, acc_num: newAccNum });
+        const newloan = await model.Loans.create({
+          userId,
+          bookId,
+          issueDate,
+          dueDate,
+          returnDate,
+          status,
+        });
+        if(book.stock == 0){
+          book.update({ status: "Borrowed" });
+        }
+    return newloan;
+  }else{
+    return null;
+  }
+  };
+
   findAllLoans = async () => {
     const loans = await model.Loans.findAll({
       attributes: [
