@@ -69,7 +69,30 @@ class LoanController {
         });
       });
     }
-    
+  };
+
+  issueLoan = async (req, res) => {
+    const { bookId, userId, bookAccNo } = req.body;
+      this.service
+      .create(bookId, userId, bookAccNo)
+      .then((result) => {
+        if(result == null){
+          res.status(404).json({ 
+            message: "Access Number Not Available or User Not Found",
+            loan: result,
+          });
+        }else{
+        res.status(201).json({
+          loan: result,
+        });
+      }
+      })
+      .catch((err) => {
+        res.status(500).json({
+          message: "Something went wrong",
+          err: err.message,
+        });
+      });
   };
 
   findall = (req, res) => {

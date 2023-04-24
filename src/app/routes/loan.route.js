@@ -9,12 +9,20 @@ router.post(
   loanController.checkUser,
   loanController.newLoan
 );
+router.post(
+  "/issue_loan",
+  // checkAuth,
+  // checkRole(["librarian", "admin", "student"]),
+  // loanController.checkUser,
+  loanController.issueLoan
+);
 router.patch(
   "/loans",
   checkAuth,
   checkRole(["librarian", "admin", "student"]),
   loanController.findall
 );
+
 router.get("/filter_loans", loanController.filter);
 router.patch(
   "/loans/:id",
